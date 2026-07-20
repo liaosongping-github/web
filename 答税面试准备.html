@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>答税科技 · 产品与面试匹配分析</title>
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --paper: #fffcf7;
+      --ink: #1c2a32;
+      --muted: #5a6b75;
+      --line: #d9cfc2;
+      --accent: #0d6e6e;
+      --accent-soft: #e4f3f2;
+      --warm: #b45309;
+      --warm-soft: #fef3e6;
+      --ok: #166534;
+      --ok-soft: #e8f5ec;
+      --mid: #854d0e;
+      --mid-soft: #fef9c3;
+      --gap: #9f1239;
+      --gap-soft: #ffe4e6;
+      --shadow: 0 10px 30px rgba(28, 42, 50, 0.06);
+      --radius: 14px;
+      --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #e7f0ee 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #f8e9d8 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.7;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(246, 243, 238, 0.92);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      max-width: 1080px; margin: 0 auto; padding: 12px 20px;
+      display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+    }
+    .brand {
+      font-weight: 700; color: var(--accent); margin-right: 8px; white-space: nowrap;
+    }
+    .nav a {
+      font-size: 13px; color: var(--muted); padding: 4px 8px; border-radius: 999px;
+    }
+    .nav a:hover { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+    header.hero {
+      padding: 48px 0 28px;
+    }
+    .eyebrow {
+      display: inline-block; font-size: 12px; letter-spacing: 0.08em;
+      color: var(--accent); background: var(--accent-soft);
+      padding: 4px 10px; border-radius: 999px; margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(1.7rem, 3vw, 2.35rem);
+      line-height: 1.25; margin: 0 0 12px; font-weight: 800;
+    }
+    .lead { color: var(--muted); font-size: 1.05rem; max-width: 720px; margin: 0 0 22px; }
+    .verdict {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin-top: 18px;
+    }
+    .vcard {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow);
+    }
+    .vcard strong { display: block; font-size: 0.95rem; margin-bottom: 4px; }
+    .vcard span { font-size: 0.9rem; color: var(--muted); }
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 28px 24px;
+      margin: 22px 0;
+      box-shadow: var(--shadow);
+    }
+    section h2 {
+      margin: 0 0 8px; font-size: 1.35rem;
+      padding-bottom: 10px; border-bottom: 2px solid var(--accent-soft);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    section h3 {
+      margin: 22px 0 8px; font-size: 1.08rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .fold-title { flex: 1; min-width: 0; }
+    .fold-btn {
+      flex-shrink: 0;
+      border: 1px solid var(--line);
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .fold-btn:hover { background: var(--accent); color: #fff; }
+    .fold-body { margin-bottom: 4px; }
+    .fold-body.is-collapsed { display: none; }
+    h2.is-collapsed, h3.is-collapsed { margin-bottom: 0; border-bottom-color: transparent; }
+    .section-lead { color: var(--muted); margin: 0 0 18px; }
+    .tip, .term {
+      background: var(--warm-soft);
+      border-left: 3px solid var(--warm);
+      padding: 10px 12px;
+      margin: 10px 0 14px;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.92rem;
+      color: #7c2d12;
+    }
+    .tip::before, .term::before {
+      content: "人话解释 · ";
+      font-weight: 700;
+      color: var(--warm);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fff;
+    }
+    .card .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.04em; color: var(--accent);
+      background: var(--accent-soft); padding: 2px 8px; border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .card h4 { margin: 0 0 6px; font-size: 1.02rem; }
+    .card .who { font-size: 0.88rem; color: var(--muted); margin-bottom: 8px; }
+    .card ul { margin: 8px 0 0; padding-left: 1.1em; }
+    .card li { margin: 4px 0; font-size: 0.92rem; }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 0.92rem;
+      overflow: hidden; border-radius: 12px;
+    }
+    th, td {
+      border: 1px solid var(--line); padding: 10px 12px; vertical-align: top; text-align: left;
+    }
+    th { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+    tr:nth-child(even) td { background: #faf8f4; }
+    .badge {
+      display: inline-block; font-size: 12px; font-weight: 700;
+      padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+    }
+    .badge-ok { background: var(--ok-soft); color: var(--ok); }
+    .badge-mid { background: var(--mid-soft); color: var(--mid); }
+    .badge-gap { background: var(--gap-soft); color: var(--gap); }
+    .flow {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin: 12px 0 18px;
+    }
+    .flow .step {
+      background: var(--accent-soft); color: var(--accent);
+      padding: 8px 12px; border-radius: 10px; font-size: 0.88rem; font-weight: 600;
+    }
+    .flow .arrow { color: var(--muted); }
+    .list-check { padding-left: 1.1em; }
+    .list-check li { margin: 8px 0; }
+    .story {
+      border: 1px dashed var(--line); border-radius: 12px;
+      padding: 14px 16px; margin: 12px 0; background: #fff;
+    }
+    .story h4 { margin: 0 0 8px; }
+    .day {
+      display: grid; grid-template-columns: 72px 1fr; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--line);
+    }
+    .day:last-child { border-bottom: none; }
+    .day .d {
+      font-weight: 800; color: var(--accent); background: var(--accent-soft);
+      border-radius: 10px; text-align: center; padding: 8px 0; height: fit-content;
+    }
+    footer {
+      text-align: center; color: var(--muted); font-size: 0.85rem; padding: 24px 0 8px;
+    }
+    .note {
+      font-size: 0.88rem; color: var(--muted);
+      background: #f3f0ea; padding: 10px 12px; border-radius: 10px; margin-top: 14px;
+    }
+    @media (max-width: 640px) {
+      section { padding: 20px 16px; }
+      .day { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">答税 · 面试准备</div>
+      <nav class="nav">
+        <a href="#products">产品全景</a>
+        <a href="#biz">商业模式</a>
+        <a href="#jd">岗位拆解</a>
+        <a href="#match">匹配度</a>
+        <a href="#gap">差距补齐</a>
+        <a href="#interview">面试话术</a>
+        <a href="#glossary">术语词典</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="eyebrow">深圳答税科技有限公司 · webtax.com.cn</div>
+      <h1>财税产品经理面试准备：产品、商业模式与你的匹配度</h1>
+      <p class="lead">
+        这份材料帮你用「普通人能听懂」的方式，搞清答税在卖什么、怎么赚钱，
+        以及你的经历（电商/SaaS/业财/AI）怎么讲成对方听得懂的匹配故事。
+      </p>
+      <div class="verdict">
+        <div class="vcard">
+          <strong>公司是谁</strong>
+          <span>立信合伙人发起的财税科技公司（不是「税友软件」）。主打税审、报税、记账、AI 问答与企业风险报告。</span>
+        </div>
+        <div class="vcard">
+          <strong>岗位在干什么</strong>
+          <span>把「报税 / 税审 / 记账」这类专业活，做成企业能天天用的软件，并推动研发落地。</span>
+        </div>
+        <div class="vcard">
+          <strong>你的匹配结论</strong>
+          <span>B 端产品与 0→1、系统对接、业财、AI 是加分项；缺的是「税怎么报、税审怎么做」的行业细节，可短期补。</span>
+        </div>
+        <div class="vcard">
+          <strong>面试主策略</strong>
+          <span>用「相邻能力迁移」叙事：结算/开票/合规 → 账票款税；AI 工作流 → TaxMind；少装专家、多讲学习路径。</span>
+        </div>
+      </div>
+      <p class="note">
+        信息来源：答税官网公开页面（产品页、会员页、关于我们）+ 你提供的简历与岗位 JD。
+        请勿与杭州「税友软件 / 亿企赢」产品线混淆。
+      </p>
+    </header>
+
+    <!-- 1. 产品全景 -->
+    <section id="products">
+      <h2>一、公司与产品全景</h2>
+      <p class="section-lead">
+        一句话：答税做的是「帮财务/税务人员少加班、少出错」的工具 + 「帮人搞懂政策」的内容/AI 平台。
+      </p>
+
+      <div class="tip">
+        财税 = 财务 + 税务。财务管「账怎么记、钱怎么算」；税务管「该交什么税、怎么向国家申报」。答税两边都碰，但核心更偏「税」相关软件。
+      </div>
+
+      <h3>1.1 五条产品线（先记故事，再记名字）</h3>
+      <div class="grid">
+        <article class="card">
+          <div class="tag">立马审 · 智汇算专业版</div>
+          <h4>帮事务所快速做完「税审」</h4>
+          <p class="who">主要客户：税务师事务所、会计师事务所里的审计/税审人员</p>
+          <div class="term">
+            税审 ≈ 专业机构帮企业检查「税交得对不对」，并出具正式报告（像体检报告）。企业有时需要这份报告去办某些业务或自查风险。
+          </div>
+          <ul>
+            <li>把企业账套数据导进来（对接很多财务软件）</li>
+            <li>自动抽查凭证、生成工作底稿</li>
+            <li>自动算常见「纳税调整」</li>
+            <li>生成报告，并尽量一键去税局/税协备案</li>
+            <li>还给事务所看项目进度、回款等经营数据</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">立马报 · 智汇算企业版</div>
+          <h4>帮企业（或代账）批量把税报出去</h4>
+          <p class="who">主要客户：企业财务、代理记账公司、有很多分子公司的集团</p>
+          <div class="term">
+            报税 / 纳税申报 ≈ 按规定时间，把「这个月/这个季度该交多少税」算清楚，填表提交给电子税务局（国家收税的网上大厅）。
+          </div>
+          <ul>
+            <li>从财务软件采数 → 自动填表、校验</li>
+            <li>多税种一起管，减少漏报</li>
+            <li>多主体（很多公司）可批量申报，少反复登录各地税局</li>
+            <li>用自动化（含 RPA）减轻人工点鼠标</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">立马答 · TaxMind</div>
+          <h4>财税版「专业 ChatGPT」</h4>
+          <p class="who">主要客户：会计、税务顾问、企业财务、需要查政策的人</p>
+          <div class="term">
+            大模型 / AI 问答 ≈ 你用大白话问「研发费用能不能加计扣除」，它结合法规库尽量给出合规、可引用的回答。不是替代专家签字，而是先快速答疑。
+          </div>
+          <ul>
+            <li>绑定答税自建法规库（政策、问答、文章很多）</li>
+            <li>支持联网追新政策、语音提问、历史对话</li>
+            <li>常作为会员权益里的「不限次 AI 咨询」</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">立马查 · 云鹏报告</div>
+          <h4>给企业做「税务+经营风险体检报告」</h4>
+          <p class="who">主要客户：银行等金融机构（放贷风控）、财税机构、企业老板</p>
+          <div class="term">
+            企业画像 / 风险报告 ≈ 把工商信息、纳税情况、发票异常、欠税处罚、上下游交易等拼成一份「这家公司靠不靠谱」的说明，方便决策。
+          </div>
+          <ul>
+            <li>看税负是否异常、有没有欠税/处罚</li>
+            <li>看发票红冲作废是否可疑</li>
+            <li>看供应链集中度、财务健康指标</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">立马记 · 智能记账</div>
+          <h4>让每月做账更快</h4>
+          <p class="who">主要客户：代理记账公司、中小企业财务</p>
+          <div class="term">
+            记账 / 凭证 ≈ 把每一笔生意（买东西、卖东西、发工资）记成会计能看懂的「流水账条目」。凭证记对了，后面才报得了税、出得了报表。
+          </div>
+          <ul>
+            <li>取票后尽量自动生成凭证</li>
+            <li>自动结转、出报表</li>
+            <li>电子账本，少纸质、少丢数据</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">平台层 · 获客与知识服务</div>
+          <h4>法规库 / 问答 / 云课堂 / 专家咨询</h4>
+          <p class="who">个人会员 + 机构用户；也是软件产品的「流量入口」</p>
+          <ul>
+            <li>查政策、看课、问专家 → 建立信任</li>
+            <li>再转化成会员，或升级买智汇算等付费工具</li>
+            <li>官网还提到「智联平台」（审计资料闭环管理），可作延伸了解</li>
+          </ul>
+        </article>
+      </div>
+
+      <h3>1.2 税审产品工作流（面试可画）</h3>
+      <div class="flow">
+        <span class="step">采数导账</span><span class="arrow">→</span>
+        <span class="step">智能抽凭</span><span class="arrow">→</span>
+        <span class="step">生成底稿</span><span class="arrow">→</span>
+        <span class="step">纳税调整</span><span class="arrow">→</span>
+        <span class="step">出报告</span><span class="arrow">→</span>
+        <span class="step">备案归档</span>
+      </div>
+      <div class="term">
+        底稿 ≈ 审计/税审过程中留下的「检查记录表」。抽凭 ≈ 从海量记账凭证里按规则挑出要重点检查的那些。纳税调整 ≈ 会计利润和税法认可的利润不一致时，按税法规则改过来再算税。
+      </div>
+    </section>
+
+    <!-- 2. 商业模式 -->
+    <section id="biz">
+      <h2>二、商业模式（谁付钱、怎么付钱）</h2>
+      <p class="section-lead">
+        答税不是只卖一个 App，而是「内容/AI 引流 → 会员订阅 → 专业工具年费/按项目 → 大客户私有化」的组合拳。
+      </p>
+
+      <h3>2.1 两条客群线</h3>
+      <div class="grid">
+        <div class="card">
+          <h4>工具线（ToB 为主）</h4>
+          <ul>
+            <li>事务所买「立马审」提效接更多项目</li>
+            <li>企业/代账买「立马报」「立马记」少加班少出错</li>
+            <li>金融机构/机构买「云鹏报告」做风控或诊断</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>知识线（个人 + 从业者）</h4>
+          <ul>
+            <li>VIP / 课程 / 黄金会员：课 + 专家咨询次数 + TaxMind</li>
+            <li>先免费搜法规、试用 AI，再付费升级</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>2.2 收入形态（官网公开卖法）</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>怎么收费</th>
+            <th>人话理解</th>
+            <th>对应产品</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>个人会员年费</td>
+            <td>像「得到/樊登」式会员：课、咨询次数、AI 问答打包卖</td>
+            <td>VIP / 课程会员 / 黄金会员 + TaxMind</td>
+          </tr>
+          <tr>
+            <td>软件按年订阅（SaaS）</td>
+            <td>每年交费，云端登录使用，不用自己装服务器</td>
+            <td>智汇算企业版等</td>
+          </tr>
+          <tr>
+            <td>按项目计价</td>
+            <td>按税审项目量买额度（官网写专业版约 100 项目起购）</td>
+            <td>智汇算专业版（立马审）</td>
+          </tr>
+          <tr>
+            <td>私有化部署</td>
+            <td>软件装到客户自己机房/云上，数据不出客户环境，通常更贵、要人跟进</td>
+            <td>独享版</td>
+          </tr>
+          <tr>
+            <td>报告试用转付费</td>
+            <td>先看一份风险报告值不值，再持续买</td>
+            <td>云鹏报告</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="term">
+        SaaS ≈ Software as a Service，软件当服务卖：你交年费，打开网页/客户端就能用，厂商负责升级维护。私有化 ≈ 软件「搬进」客户自己的环境，更强调安全与定制。
+      </div>
+
+      <h3>2.3 交叉销售（产品怎么互相带量）</h3>
+      <ul class="list-check">
+        <li><strong>法规库 / 课堂 / TaxMind</strong> 拉新 → 转化会员</li>
+        <li>会员里的代账/财务人员 → 升级买 <strong>立马记 + 立马报</strong></li>
+        <li>事务所客户用 <strong>立马审</strong> 做项目 → 可能延伸咨询、培训、报告类服务</li>
+        <li><strong>云鹏报告</strong> 面向银行/风控，是另一条「数据服务」收入线，不完全依赖会员</li>
+      </ul>
+
+      <h3>2.4 对「财税产品经理」意味着什么</h3>
+      <p>
+        你日常不是做商品详情页，而是：把复杂专业流程拆成功能模块、保证合规不出错、对接财务软件和税局、
+        用 AI 缩短作业时间、并想清楚「免费功能」和「付费转化」怎么配。
+        这和你做过的 <strong>B 端后台、中台、结算、SaaS 封装、AI 提效</strong> 是同一类产品思维。
+      </p>
+    </section>
+
+    <!-- 3. JD -->
+    <section id="jd">
+      <h2>三、岗位 JD 白话拆解</h2>
+      <p class="section-lead">岗位：财税产品经理 · 深圳 · 18–30K · 3–5 年 · 本科 · B 端 / ERP 软件产品</p>
+
+      <h3>3.1 工作职责（他们希望你每天干嘛）</h3>
+      <table>
+        <thead>
+          <tr><th>JD 原文要点</th><th>人话</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>市场调研、产品构思、可行性、竞品资料</td>
+            <td>先搞清「用户痛不痛、值不值得做、别人怎么做」再立项</td>
+          </tr>
+          <tr>
+            <td>产品架构图、规划方案、功能设计</td>
+            <td>画出系统长什么样、先做哪块后做哪块</td>
+          </tr>
+          <tr>
+            <td>界面/流程设计，协调研发，控进度质量</td>
+            <td>写清需求，跟开发对齐，把版本按期上线</td>
+          </tr>
+          <tr>
+            <td>洞察用户、收集反馈、分析行为、持续优化</td>
+            <td>上线不是结束，要根据使用数据改体验</td>
+          </tr>
+          <tr>
+            <td>梳理研发流程、盯竞品策略</td>
+            <td>既管交付节奏，也保持对市场敏感</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3.2 任职资格（他们怎么筛人）</h3>
+      <table>
+        <thead>
+          <tr><th>要求</th><th>人话</th><th>对你</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>有财税产品设计经验或接触过 + 学习力强；深耕财税行业</td>
+            <td>最好做过税/财务软件；没做过也要证明学得快、懂行业一点</td>
+            <td><span class="badge badge-mid">部分匹配</span> 有业财/开票相邻经验，缺税审报税深水区</td>
+          </tr>
+          <tr>
+            <td>3 年以上；优先 ToB SaaS 平台产品经验</td>
+            <td>做过面向企业的订阅制软件加分</td>
+            <td><span class="badge badge-ok">匹配</span> 企业商城 SaaS 化、多系统平台经验强</td>
+          </tr>
+          <tr>
+            <td>懂 SaaS：需求分析、体验、规划、优化、营销与效果分析</td>
+            <td>不只会画原型，还懂怎么让产品好卖、好用、可衡量</td>
+            <td><span class="badge badge-ok">匹配</span> 有增长与运营协同经历</td>
+          </tr>
+          <tr>
+            <td>熟练思维导图、流程图、Axure</td>
+            <td>能把流程画清楚，会用原型工具</td>
+            <td><span class="badge badge-mid">可补</span> 简历未突出 Axure，面试可展示替代工具与样例</td>
+          </tr>
+          <tr>
+            <td>有 0→1；设计过 ≥2 个大型项目</td>
+            <td>能从无到有扛过完整产品</td>
+            <td><span class="badge badge-ok">匹配</span> 企业商城、结算中心、选品比价等</td>
+          </tr>
+          <tr>
+            <td>优先税务/财务管理/会计/审计等专业</td>
+            <td>科班出身更好沟通业务</td>
+            <td><span class="badge badge-gap">缺口</span> 计算机背景，需用项目证明业务学习力</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4. 匹配度 -->
+    <section id="match">
+      <h2>四、你的简历 vs 答税岗位 · 匹配矩阵</h2>
+      <p class="section-lead">基于简历：侨城汇（福利商城 / 企业集采 / 统一结算中心）、云中鹤（选品比价 / 履约监控 / 重点客户集成）、大乐装（采购平台 / BBC 商城）；能力关键词含业财融合与 AI 协作。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>等级</th>
+            <th>证据（你已有）</th>
+            <th>面试怎么说</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ToB / SaaS / 0→1</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>企业商城从 0 到年收 3000 万+；SaaS 化输出粤海置地等</td>
+            <td>强调「可配置平台 + 多租户思维」，对标智汇算给不同事务所/企业用</td>
+          </tr>
+          <tr>
+            <td>跨系统集成</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>京东慧采等供应链对接；OA/费控；南网 API 四链路；航信开票</td>
+            <td>对标「对接 700+ 财务软件 / 电子税务局」——你擅长的是对接复杂度，规则可学</td>
+          </tr>
+          <tr>
+            <td>业财 / 账票款</td>
+            <td><span class="badge badge-ok">高（相邻）</span></td>
+            <td>统一结算中心：账单清洗入账、开票、合规结算</td>
+            <td>主动延伸一句：「我熟悉账票款闭环，进入答税后会把『税』这一环补齐」</td>
+          </tr>
+          <tr>
+            <td>AI 产品化</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>Cursor Agent + 产品真相库工作流，缩短需求评估与 PRD</td>
+            <td>对标 TaxMind / 智能抽凭 / 自动纳税调整：讲「如何把 AI 嵌进作业流而不是聊天玩具」</td>
+          </tr>
+          <tr>
+            <td>B 端流程系统（JD 写 ERP）</td>
+            <td><span class="badge badge-mid">中</span></td>
+            <td>采购平台、结算中台、履约监控规则引擎</td>
+            <td>避免只讲「卖货商城」；改讲审批流、规则引擎、多角色后台</td>
+          </tr>
+          <tr>
+            <td>财税垂直专业</td>
+            <td><span class="badge badge-gap">低</span></td>
+            <td>无税种设计、无税审底稿产品经历；非财税专业</td>
+            <td>诚实缺口 + 展示 7 天学习成果与产品试用笔记</td>
+          </tr>
+          <tr>
+            <td>原型工具 Axure</td>
+            <td><span class="badge badge-mid">中</span></td>
+            <td>有流程/方案能力，简历未写 Axure</td>
+            <td>准备 1 个 Axure/替代工具的流程原型链接或截图</td>
+          </tr>
+          <tr>
+            <td>地点 / 年限 / 学历门槛</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>深圳工作经历、6 年产品、本科</td>
+            <td>硬性门槛基本满足</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>综合判断</h3>
+      <p>
+        <strong>值得面，也值得认真补课。</strong>
+        你不是「完全外行」，而是「强产品经理 + 弱财税专科」；答税 JD 也写了「有接触 + 学习能力强」的弹性。
+        面试胜负手在于：能否在 30 分钟内让对方相信，你能把已有的中台/集成/AI 能力，迁移到税审与申报产品上。
+      </p>
+    </section>
+
+    <!-- 5. 差距 -->
+    <section id="gap">
+      <h2>五、差距与 7 天补齐路径</h2>
+
+      <h3>5.1 主要差距（白话）</h3>
+      <ul class="list-check">
+        <li>还不太熟：企业每个月/季/年要报哪些常见税，电子税务局大概怎么操作</li>
+        <li>还不太熟：事务所做企业所得税汇算鉴证时，从导账到出报告的一天长什么样</li>
+        <li>还没建立：答税五个产品各自「谁付钱、怕什么、爱什么功能」的用户画像</li>
+        <li>竞品只知皮毛：同赛道还有哪些报税/税审/代账工具（知道名字和差异即可）</li>
+      </ul>
+      <div class="term">
+        汇算清缴 ≈ 企业所得税不是只按月估着交，年底还要按全年真实利润「算总账」，多退少补。很多税审项目就围绕这件事。
+      </div>
+
+      <h3>5.2 七天速补清单</h3>
+      <div class="day">
+        <div class="d">D1</div>
+        <div>
+          <strong>搞清答税五产品</strong>：打开官网每个产品页，用自己的话各写 3 句「帮谁、解决啥、怎么收费」。试用 TaxMind / 云鹏（若可注册）。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D2</div>
+        <div>
+          <strong>税种扫盲</strong>：只记增值税、企业所得税、个人所得税、附加税费、印花税「各自对普通人意味着什么」+ 大概多久报一次。不求背法条。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D3</div>
+        <div>
+          <strong>跟一遍报税故事</strong>：想象「一家有 10 个子公司的集团财务」月底痛点；对照立马报的卖点写「如果我是 PM，第一期做哪 3 个功能」。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D4</div>
+        <div>
+          <strong>跟一遍税审故事</strong>：想象「税审助理外勤导账半天」；对照立马审流程，画出你自己的流程图（可用任意工具）。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D5</div>
+        <div>
+          <strong>业财迁移故事打磨</strong>：把「统一结算中心」改写成「账-票-款-（税）」叙事，录音 3 分钟自我介绍练到顺。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D6</div>
+        <div>
+          <strong>AI 故事对齐 TaxMind</strong>：用你的「真相库工作流」类比「法规库 + 作业流嵌入」；准备 1 个「AI 幻觉/合规风险」怎么控的回答。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D7</div>
+        <div>
+          <strong>模拟面试</strong>：对着本文 6.2 / 6.4「追问」自问自答；查 2～3 个竞品官网首页差异（功能定位一句话即可）。
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 面试 -->
+    <section id="interview">
+      <h2>六、面试话术包</h2>
+
+      <h3>6.1 自我介绍（约 90 秒）</h3>
+      <div class="story">
+        <p>
+          面试官，下午好。我叫廖送平，计算机专业背景，大学实习做过半年开发，毕业后一直做产品经理，至今有 6 年 B 端产品经验。期间做过 S2B2C、S2B2B 模式电商平台；对内参与供应链系统整合重建、业务系统统一结算中心建设，并与财务系统集成实现业财一体化；对外负责过 SaaS 商城能力封装与大客户个性化定制，以及与客户、供应商系统的深度对接集成，提高供应链运转效率。
+        </p>
+        <p>我的核心优势有如下几点：</p>
+        <p>第一，过往项目主要服务 ToB 企业客户，做过 SaaS 产品和大客定制化，并具备丰富的跨系统对接集成经验；</p>
+        <p>第二，有业财一体化实战：做过账票款统一结算，熟悉业务到财务的闭环，后续便于快速补齐税务和税审环节；</p>
+        <p>第三，同时自己也在积极使用 AI，用 AI Agent 搭建系统现状知识库，把 AI 嵌进自己的产品工作流，提升工作效率，而不只是停留在网页中与大模型对话问答。</p>
+        <p>
+          这次应聘答税的财税产品岗位，希望可以把业财、系统集成和 SaaS 产品经验迁移到税审与智慧申报这类更深的专业场景。通过昨天研读贵公司的在售产品，有信心支持迭代。谢谢。
+        </p>
+      </div>
+
+      <h3>6.2 自我介绍后可能追问（预判）</h3>
+      <p class="section-lead">介绍讲完，对方常沿你刚抛出的关键词追问。按出现概率准备。</p>
+
+      <h4>几乎必问（紧扣自我介绍）</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>建议怎么答</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>统一结算中心 / 账票款具体怎么做的？</td>
+            <td>
+              <strong>STAR：</strong>多业务线结算分散<br />
+              → 从 0 到 1 建结算枢纽（归集订单、账单清洗入账、对接航信开票，约 4 个月打通）<br />
+              → 账票款统一、减少重复建设<br /><br />
+              <strong>收尾迁移：</strong>与报税/税审前的「数据归集—规则处理—对外报送」同类；缺的是税种规则，产品方法可复用。
+            </td>
+          </tr>
+          <tr>
+            <td>系统对接最难的例子？</td>
+            <td>
+              优先讲南方电网福利/积分商城（30 天打通商品/订单/物流/售后）或供应链平台对接。<br /><br />
+              <strong>强调：</strong>范围冻结、联调清单、异常兜底、业务陪跑<br />
+              → 对标对接多家财务软件 / 电子税务局的复杂度管理。
+            </td>
+          </tr>
+          <tr>
+            <td>不是财税专业，为什么能做？差距怎么补？</td>
+            <td>
+              承认税种、税审底稿、申报细节是短板；<br />
+              相邻能力是业财、开票、合规结算、ToB 流程。<br /><br />
+              已研读立马审/报/TaxMind，分得清审与报；<br />
+              补法：跟专家共建规则配置化 + 跟通一条主作业流，不装专家。
+            </td>
+          </tr>
+          <tr>
+            <td>了解我们产品吗？立马审和立马报区别？</td>
+            <td>
+              <strong>审：</strong>帮事务所做税审，出鉴证报告并备案。<br />
+              <strong>报：</strong>帮企业/代账批量向电子税务局申报。<br />
+              客群、作业流、交付物都不同。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>高频追问（拆开你的三点优势）</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>建议怎么答</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SaaS 和大客定制怎么平衡？</td>
+            <td>
+              核心能力标准化可配置；<br />
+              差异用参数/权限/流程；战略客户才定制，并评估能否回馈产品。<br />
+              对标：不同事务所/企业的差异化配置。
+            </td>
+          </tr>
+          <tr>
+            <td>AI Agent + 知识库怎么用？和 TaxMind 关系？</td>
+            <td>
+              <strong>用法：</strong>PRD + 代码双源 → 系统现状库 → 影响分析 → 写方案。<br /><br />
+              <strong>对齐：</strong>TaxMind 是垂直知识；智能抽凭/纳税调整是作业流嵌入。<br /><br />
+              <strong>边界：</strong>AI 提建议，专家/规则负责合规签发，防幻觉。
+            </td>
+          </tr>
+          <tr>
+            <td>为什么从电商转到财税？</td>
+            <td>
+              不是追风口，是能力延伸：交易 → 结算 → 合规 → 税；<br />
+              想在专业垂直领域做深；认同答税「工具 + 知识 + AI」。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>产品经理常规题</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>建议怎么答</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>负责立马报或立马审，前 90 天做什么？</td>
+            <td>
+              <strong>30 天：</strong>跟通一条完整用户路径，分清审/报，摸清耗时、申报成功率、续费等指标。<br />
+              <strong>60 天：</strong>接一类迭代（稳定/提效/转化）。<br />
+              <strong>90 天：</strong>对负责模块提出可量化目标并上线验证。<br />
+              主路径先选一条，别两条都深挖。
+            </td>
+          </tr>
+          <tr>
+            <td>财务软件已能报税，立马报会不会多余？</td>
+            <td>
+              单主体、单软件往往够用；<br />
+              差异在：代账/多主体批量、多财务软件采数、申报期规则与对接。<br />
+              和金蝶用友是部分重叠、部分互补。
+            </td>
+          </tr>
+          <tr>
+            <td>税审报告和云鹏报告有什么区别？</td>
+            <td>
+              <strong>税审报告：</strong>事务所专业鉴证，用于汇算/办事/自查。<br />
+              <strong>云鹏报告：</strong>风险画像，用于信贷风控/诊断。<br />
+              一个鉴证，一个情报。
+            </td>
+          </tr>
+          <tr>
+            <td>怎么做需求分析？如何与专家协作？</td>
+            <td>
+              你负责：结构化、优先级、流程抽象；<br />
+              专家负责：规则正确性；<br />
+              规则做成可配置，避免专家绑在每个项目上。
+            </td>
+          </tr>
+          <tr>
+            <td>用过 Axure 吗？</td>
+            <td>
+              如实说工具栈；强调能画清流程和原型；<br />
+              可现场画立马审主路径证明结构能力。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>压力 / 细节题（有备无患）</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>回答方向</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>薪资预期？</td>
+            <td>面议；先谈匹配与可贡献，再谈区间。</td>
+          </tr>
+          <tr>
+            <td>稳定性 / 为何看机会？</td>
+            <td>正向：想深耕专业垂直；避免抱怨前司。</td>
+          </tr>
+          <tr>
+            <td>记账、报税、税审顺序？</td>
+            <td>
+              企业日常：记账 → 按期报税；<br />
+              税审是外部体检，非每单必经。
+            </td>
+          </tr>
+          <tr>
+            <td>采购/销售单财务节点？</td>
+            <td>
+              货票款三单匹配；<br />
+              销售侧重交付确认收入；<br />
+              采购侧重收货入库 + 收票抵扣。
+            </td>
+          </tr>
+          <tr>
+            <td>竞品谁？我们第几？</td>
+            <td>
+              按赛道拆；不说全国第几；<br />
+              税审垂直有认知，报税偏红海挑战者。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tip">
+        考前优先背熟：结算中心故事、南网对接故事、审 vs 报、两份报告区别、立马报是否多余。被问税务细节时：不会就说不会 + 说明怎么向专家求证，比硬编强。
+      </div>
+
+      <h3>6.3 三个可讲项目（STAR 提纲）</h3>
+      <div class="story">
+        <h4>故事 A · 统一结算中心（对标：账票款 / 合规 / 中台）</h4>
+        <p><strong>S</strong> 多业务线结算分散、合规风险高，财务入账慢。<br />
+           <strong>T</strong> 从 0 到 1 建统一结算枢纽。<br />
+           <strong>A</strong> 归集订单→账单清洗转换→推财务入账；对接航信自动开票；多部门 4 个月打通。<br />
+           <strong>R</strong> 统一账票款管理，减少重复建设，沉淀数据底座。<br />
+           <strong>迁移句</strong>：这与报税/税审前的「数据归集—规则处理—对外报送」是同一类结构。</p>
+      </div>
+      <div class="story">
+        <h4>故事 B · 企业商城 SaaS 化（对标：ToB SaaS / 可配置）</h4>
+        <p><strong>S</strong> 内部集采能力要对外输出。<br />
+           <strong>T</strong> 封装核心能力做可配置采购平台。<br />
+           <strong>A</strong> 对接头部供应商与 OA/费控；支持客户个性化。<br />
+           <strong>R</strong> 外部客户额外创收 1500 万+。<br />
+           <strong>迁移句</strong>：理解多客户差异化配置，类似不同事务所/企业的税审与申报差异。</p>
+      </div>
+      <div class="story">
+        <h4>故事 C · AI + 产品真相库（对标：TaxMind / 智能作业）</h4>
+        <p><strong>S</strong> 需求评估依赖人口径，和代码现状脱节。<br />
+           <strong>T</strong> 用 Agent 把 PRD 与代码双源建成「真相库」工作流。<br />
+           <strong>A</strong> 初始化→影响分析→PRD→上线→回写知识库。<br />
+           <strong>R</strong> 缩短评估与方案起草周期。<br />
+           <strong>迁移句</strong>：和「法规库 + 大模型 + 嵌入税审/咨询作业」是同一产品哲学。</p>
+      </div>
+
+      <h3>6.4 可能追问与答法要点</h3>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>怎么答（要点）</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>你不懂税务怎么办？</td>
+            <td>承认缺口；展示相邻经验；说明已试用/梳理产品与 7 天计划；强调 PM 价值是抽象流程与落地，专家规则可共建。</td>
+          </tr>
+          <tr>
+            <td>立马审和立马报区别？</td>
+            <td>审=事务所做检查出报告；报=企业/代账向税局申报交税。客群与作业流不同。</td>
+          </tr>
+          <tr>
+            <td>你怎么看 TaxMind？</td>
+            <td>垂直知识 + 作业场景嵌入才有壁垒；要解决幻觉与责任边界（AI 建议 vs 专家签发）。</td>
+          </tr>
+          <tr>
+            <td>如何做竞品分析？</td>
+            <td>按客群（事务所/企业/代账）、关键作业步骤、对接能力、定价、AI 深度五维对比，不只比功能清单。</td>
+          </tr>
+          <tr>
+            <td>0→1 你怎么保证质量？</td>
+            <td>用结算中心/南网案例：范围冻结、联调清单、灰度、业务陪跑、指标验收。</td>
+          </tr>
+          <tr>
+            <td>为何从电商转到财税？</td>
+            <td>不是追风口，是能力自然延伸：交易→结算→合规→税；想在更专业垂直领域做深。</td>
+          </tr>
+          <tr>
+            <td>薪资 18–30K 预期？</td>
+            <td>按简历「面议」准备区间；强调匹配度与可落地贡献，避免第一轮死咬数字。</td>
+          </tr>
+          <tr>
+            <td>用过 Axure 吗？</td>
+            <td>如实说工具栈；强调流程图/原型能力可迁移；可现场画立马审主流程证明结构能力。</td>
+          </tr>
+          <tr>
+            <td>如果让你做 Q3 规划？</td>
+            <td>先访谈 3 类用户；选一条主路径（如多主体申报或税审采数）打磨；AI 做辅助提效；用留存/耗时/差错率衡量。</td>
+          </tr>
+          <tr>
+            <td>如何与专家型同事协作？</td>
+            <td>你负责结构化与优先级；专家负责规则正确性；用「规则配置化」减少把专家绑在每个项目上。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>6.5 你可主动反问对方的问题</h3>
+      <h4>公司客户和系统建设情况</h4>
+      <ul class="list-check">
+        <li>目前贵公司的核心客户画像是？业务体量在多少呢？</li>
+        <li>目前贵公司的产品建设到什么程度？</li>
+        <li>近半年或一年的建设方向和产品目标是？</li>
+        <li>一般一个月有几个版本，需求从提出到上线的周期大概多久呢？</li>
+      </ul>
+      <h4>部门情况</h4>
+      <ul class="list-check">
+        <li>研发和产品各多少人？</li>
+        <li>产品之间如何分工？</li>
+        <li>这个岗位是新增岗还是替补岗呢？负责的工作内容是？</li>
+        <li>产品经理、财税专家和销售目前是如何协同作业的呢？</li>
+      </ul>
+    </section>
+
+    <!-- 7. 术语词典 -->
+    <section id="glossary">
+      <h2>七、术语小词典（考前速查）</h2>
+      <p class="section-lead">把本页出现过的词，再用一张表记牢。面试听不懂时，先用「人话」对齐，再记正式名称。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>术语</th>
+            <th>人话解释</th>
+            <th>和答税的关系</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>财税</td>
+            <td>财务记账 + 税务申报/合规的统称</td>
+            <td>公司定位与岗位名称核心</td>
+          </tr>
+          <tr>
+            <td>税务师 / 会计师事务所</td>
+            <td>持牌专业服务机构，帮企业审计、税审、咨询</td>
+            <td>立马审的核心付费客户</td>
+          </tr>
+          <tr>
+            <td>税审 / 鉴证报告</td>
+            <td>专业检查交税对不对，并出具正式报告</td>
+            <td>立马审主流程终点</td>
+          </tr>
+          <tr>
+            <td>汇算清缴</td>
+            <td>企业所得税年度算总账、多退少补</td>
+            <td>税审与申报高峰场景</td>
+          </tr>
+          <tr>
+            <td>纳税申报 / 报税</td>
+            <td>按规定向税局提交应纳税信息</td>
+            <td>立马报主场景</td>
+          </tr>
+          <tr>
+            <td>电子税务局</td>
+            <td>国家税务的网上办事大厅</td>
+            <td>立马报要对接的关键外部系统</td>
+          </tr>
+          <tr>
+            <td>税种（增值税等）</td>
+            <td>不同类型的税，像不同缴费项目</td>
+            <td>全税种申报 = 多种税一次管起来</td>
+          </tr>
+          <tr>
+            <td>纳税调整</td>
+            <td>按税法规则把会计利润改成应税口径</td>
+            <td>立马审/报都强调自动化</td>
+          </tr>
+          <tr>
+            <td>凭证 / 抽凭 / 底稿</td>
+            <td>记账条目；挑重点查；检查过程记录</td>
+            <td>立马审提效关键点</td>
+          </tr>
+          <tr>
+            <td>代理记账（代账）</td>
+            <td>外包给别人帮小企业记账报税</td>
+            <td>立马记、立马报的重要渠道客户</td>
+          </tr>
+          <tr>
+            <td>SaaS / 私有化</td>
+            <td>年费云端用 / 装到客户自己环境</td>
+            <td>官网明确的两种卖法</td>
+          </tr>
+          <tr>
+            <td>RPA</td>
+            <td>软件机器人自动点界面、跑重复操作</td>
+            <td>申报自动化卖点之一</td>
+          </tr>
+          <tr>
+            <td>金税 / 以数治税</td>
+            <td>税务监管越来越数字化、数据化</td>
+            <td>行业大背景：企业更需要合规工具</td>
+          </tr>
+          <tr>
+            <td>数电票</td>
+            <td>全面数字化的电子发票</td>
+            <td>记账取票、风控看发票异常都相关</td>
+          </tr>
+          <tr>
+            <td>TaxMind</td>
+            <td>答税的财税垂直大模型产品</td>
+            <td>立马答；会员权益与咨询提效</td>
+          </tr>
+          <tr>
+            <td>立信</td>
+            <td>知名会计师/税务师事务所体系；答税由立信合伙人发起</td>
+            <td>专业背书与专家资源叙事</td>
+          </tr>
+          <tr>
+            <td>税友软件 / 亿企赢</td>
+            <td>另一家上市财税软件公司（杭州）</td>
+            <td><strong>不是</strong>答税；面试别串台</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      本地面试准备页 · 仅供个人求职使用 · 内容依据答税官网公开信息与个人简历整理<br />
+      文件：答税面试准备.html · 用浏览器打开即可离线阅读
+    </footer>
+  </div>
+  <script>
+    (function () {
+      function wrapHeading(heading, stopTag) {
+        var nodes = [];
+        var node = heading.nextSibling;
+        while (node) {
+          var next = node.nextSibling;
+          if (node.nodeType === 1) {
+            var tag = node.tagName;
+            if (tag === stopTag || tag === "H2") break;
+            if (stopTag === "H3" && tag === "H3") break;
+            nodes.push(node);
+          } else if (node.nodeType === 3 && node.textContent.trim()) {
+            nodes.push(node);
+          }
+          node = next;
+        }
+        if (!nodes.length) return;
+
+        var body = document.createElement("div");
+        body.className = "fold-body";
+        nodes.forEach(function (n) { body.appendChild(n); });
+        heading.parentNode.insertBefore(body, heading.nextSibling);
+
+        var title = document.createElement("span");
+        title.className = "fold-title";
+        while (heading.firstChild) title.appendChild(heading.firstChild);
+        heading.appendChild(title);
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "fold-btn";
+        btn.setAttribute("aria-expanded", "true");
+        btn.textContent = "收起";
+        heading.appendChild(btn);
+
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var collapsed = body.classList.toggle("is-collapsed");
+          heading.classList.toggle("is-collapsed", collapsed);
+          btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+          btn.textContent = collapsed ? "展开" : "收起";
+        });
+      }
+
+      document.querySelectorAll(".wrap > section").forEach(function (section) {
+        var h3s = Array.prototype.slice.call(section.querySelectorAll(":scope > h3")).reverse();
+        h3s.forEach(function (h3) { wrapHeading(h3, "H3"); });
+        var h2 = section.querySelector(":scope > h2");
+        if (h2) wrapHeading(h2, "H2");
+      });
+
+      function setFold(heading, collapsed) {
+        var body = heading.nextElementSibling;
+        if (!body || !body.classList.contains("fold-body")) return;
+        var btn = heading.querySelector(".fold-btn");
+        body.classList.toggle("is-collapsed", collapsed);
+        heading.classList.toggle("is-collapsed", collapsed);
+        if (btn) {
+          btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+          btn.textContent = collapsed ? "展开" : "收起";
+        }
+      }
+
+      document.querySelectorAll(".wrap > section > h2, .wrap > section > h3").forEach(function (el) {
+        setFold(el, true);
+      });
+
+      var interview = document.getElementById("interview");
+      if (interview) {
+        interview.querySelectorAll(":scope > h2, :scope > h3").forEach(function (el) {
+          setFold(el, false);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
