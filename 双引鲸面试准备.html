@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>双引鲸 · 产品与面试匹配分析</title>
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --paper: #fffcf7;
+      --ink: #1c2a32;
+      --muted: #5a6b75;
+      --line: #d9cfc2;
+      --accent: #0d6e6e;
+      --accent-soft: #e4f3f2;
+      --warm: #b45309;
+      --warm-soft: #fef3e6;
+      --ok: #166534;
+      --ok-soft: #e8f5ec;
+      --mid: #854d0e;
+      --mid-soft: #fef9c3;
+      --gap: #9f1239;
+      --gap-soft: #ffe4e6;
+      --shadow: 0 10px 30px rgba(28, 42, 50, 0.06);
+      --radius: 14px;
+      --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #e7f0ee 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #f8e9d8 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.7;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(246, 243, 238, 0.92);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      max-width: 1080px; margin: 0 auto; padding: 12px 20px;
+      display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+    }
+    .brand {
+      font-weight: 700; color: var(--accent); margin-right: 8px; white-space: nowrap;
+    }
+    .nav a {
+      font-size: 13px; color: var(--muted); padding: 4px 8px; border-radius: 999px;
+    }
+    .nav a:hover { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+    header.hero {
+      padding: 48px 0 28px;
+    }
+    .eyebrow {
+      display: inline-block; font-size: 12px; letter-spacing: 0.08em;
+      color: var(--accent); background: var(--accent-soft);
+      padding: 4px 10px; border-radius: 999px; margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(1.7rem, 3vw, 2.35rem);
+      line-height: 1.25; margin: 0 0 12px; font-weight: 800;
+    }
+    .lead { color: var(--muted); font-size: 1.05rem; max-width: 720px; margin: 0 0 22px; }
+    .verdict {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin-top: 18px;
+    }
+    .vcard {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow);
+    }
+    .vcard strong { display: block; font-size: 0.95rem; margin-bottom: 4px; }
+    .vcard span { font-size: 0.9rem; color: var(--muted); }
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 28px 24px;
+      margin: 22px 0;
+      box-shadow: var(--shadow);
+    }
+    section h2 {
+      margin: 0 0 8px; font-size: 1.35rem;
+      padding-bottom: 10px; border-bottom: 2px solid var(--accent-soft);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    section h3 {
+      margin: 22px 0 8px; font-size: 1.08rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .fold-title { flex: 1; min-width: 0; }
+    .fold-btn {
+      flex-shrink: 0;
+      border: 1px solid var(--line);
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .fold-btn:hover { background: var(--accent); color: #fff; }
+    .fold-body { margin-bottom: 4px; }
+    .fold-body.is-collapsed { display: none; }
+    h2.is-collapsed, h3.is-collapsed { margin-bottom: 0; border-bottom-color: transparent; }
+    .section-lead { color: var(--muted); margin: 0 0 18px; }
+    .tip, .term {
+      background: var(--warm-soft);
+      border-left: 3px solid var(--warm);
+      padding: 10px 12px;
+      margin: 10px 0 14px;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.92rem;
+      color: #7c2d12;
+    }
+    .tip::before, .term::before {
+      content: "人话解释 · ";
+      font-weight: 700;
+      color: var(--warm);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fff;
+    }
+    .card .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.04em; color: var(--accent);
+      background: var(--accent-soft); padding: 2px 8px; border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .card h4 { margin: 0 0 6px; font-size: 1.02rem; }
+    .card .who { font-size: 0.88rem; color: var(--muted); margin-bottom: 8px; }
+    .card ul { margin: 8px 0 0; padding-left: 1.1em; }
+    .card li { margin: 4px 0; font-size: 0.92rem; }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 0.92rem;
+      overflow: hidden; border-radius: 12px;
+    }
+    th, td {
+      border: 1px solid var(--line); padding: 10px 12px; vertical-align: top; text-align: left;
+    }
+    th { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+    tr:nth-child(even) td { background: #faf8f4; }
+    .badge {
+      display: inline-block; font-size: 12px; font-weight: 700;
+      padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+    }
+    .badge-ok { background: var(--ok-soft); color: var(--ok); }
+    .badge-mid { background: var(--mid-soft); color: var(--mid); }
+    .badge-gap { background: var(--gap-soft); color: var(--gap); }
+    .flow {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin: 12px 0 18px;
+    }
+    .flow .step {
+      background: var(--accent-soft); color: var(--accent);
+      padding: 8px 12px; border-radius: 10px; font-size: 0.88rem; font-weight: 600;
+    }
+    .flow .arrow { color: var(--muted); }
+    .list-check { padding-left: 1.1em; }
+    .list-check li { margin: 8px 0; }
+    .story {
+      border: 1px dashed var(--line); border-radius: 12px;
+      padding: 14px 16px; margin: 12px 0; background: #fff;
+    }
+    .story h4 { margin: 0 0 8px; }
+    .day {
+      display: grid; grid-template-columns: 72px 1fr; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--line);
+    }
+    .day:last-child { border-bottom: none; }
+    .day .d {
+      font-weight: 800; color: var(--accent); background: var(--accent-soft);
+      border-radius: 10px; text-align: center; padding: 8px 0; height: fit-content;
+    }
+    footer {
+      text-align: center; color: var(--muted); font-size: 0.85rem; padding: 24px 0 8px;
+    }
+    .note {
+      font-size: 0.88rem; color: var(--muted);
+      background: #f3f0ea; padding: 10px 12px; border-radius: 10px; margin-top: 14px;
+    }
+    @media (max-width: 640px) {
+      section { padding: 20px 16px; }
+      .day { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">双引鲸 · 面试准备</div>
+      <nav class="nav">
+        <a href="#products">产品全景</a>
+        <a href="#biz">商业模式</a>
+        <a href="#jd">岗位拆解</a>
+        <a href="#match">匹配度</a>
+        <a href="#gap">差距补齐</a>
+        <a href="#interview">面试话术</a>
+        <a href="#glossary">术语词典</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="eyebrow">双引鲸 / 小竹熊体系 · 深圳龙岗坂田 · 10-15K</div>
+      <h1>ERP 软件产品经理面试准备：产品、业务与你的匹配度</h1>
+      <p class="lead">
+        这份材料帮你用「普通人能听懂」的方式，搞清双引鲸在卖什么、和小竹熊什么关系，
+        以及你的经历（商贸电商 / SaaS / 订单履约 / 业财）怎么讲成对方听得懂的匹配故事。
+      </p>
+      <div class="verdict">
+        <div class="vcard">
+          <strong>公司是谁</strong>
+          <span>澄海玩具产业数字化团队：先做小竹熊选品平台（找货），2026 推双引鲸贸易管理 ERP（管经营）。深圳是技术中心。</span>
+        </div>
+        <div class="vcard">
+          <strong>岗位在干什么</strong>
+          <span>负责 ERP 的<strong>订单、财务</strong>核心模块；深挖中小客户痛点，做成<strong>轻量化</strong>功能并推动研发落地。</span>
+        </div>
+        <div class="vcard">
+          <strong>你的匹配结论</strong>
+          <span>商贸 SaaS、订单履约、统一结算/业财是强项；玩具垂直术语与「幕客」工具需如实补；勿硬说自己是传统 ERP 专家。</span>
+        </div>
+        <div class="vcard">
+          <strong>面试主策略</strong>
+          <span>用「单据流迁移」叙事：电商订单+结算 → ERP 订单+财务；强调<strong>轻量化、可配置、中小客户好上手</strong>，少讲重定制大项目。</span>
+        </div>
+      </div>
+      <p class="note">
+        信息来源：BOSS 公司页 / JD 截图 · 小竹熊展商公开简介 · 个人简历与准备材料。
+        工商主体「汕头市双引鲸科技有限公司」2025-10 成立；业务叙事多归属广东小竹熊科技（约 2020）。
+      </p>
+    </header>
+
+    <!-- 1. 产品全景 -->
+    <section id="products">
+      <h2>一、公司与产品全景</h2>
+      <p class="section-lead">
+        一句话：小竹熊帮玩具贸易「找源头、选货」；双引鲸帮贸易企业「把采购、库存、订单、账务管起来」。
+      </p>
+
+      <div class="tip">
+        澄海 = 中国玩具产业重镇。典型角色：厂商（做玩具）←→ 展厅（样品展示撮合）←→ 贸易商（采购/分销）。数字化要同时解决「找货难」和「企业内部管账乱」。
+      </div>
+
+      <h3>1.1 两条产品线（先记故事，再记名字）</h3>
+      <div class="grid">
+        <article class="card">
+          <div class="tag">小竹熊 · 玩具选品平台</div>
+          <h4>选玩具，找源头</h4>
+          <p class="who">主要客户：贸易公司、展厅、玩具厂商；平台侧选品与供需对接</p>
+          <div class="term">
+            选品平台 ≈ 产业版「货源广场」：海量款式、识图搜货、询价报价、借样补样、线上洽谈，解决「货在哪、怎么对接」。
+          </div>
+          <ul>
+            <li>2020 年起深耕澄海，与多家知名展厅合作</li>
+            <li>公开叙事：服务上万～数万家贸易/生产企业，SKU 海量</li>
+            <li>本岗<strong>不主做</strong>这条，但要理解它是获客与产业入口</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">双引鲸 · 贸易管理系统（ERP）</div>
+          <h4>未来管理更轻松</h4>
+          <p class="who">主要客户：玩具贸易中小企业（经营侧数字化）</p>
+          <div class="term">
+            贸易 ERP ≈ 企业内部的进销存 + 订单履约 + 财务单据系统：把「买进来、存着、卖出去、对上账」做成软件。
+          </div>
+          <ul>
+            <li>2026 推出；本岗主做这条</li>
+            <li>JD 明确：先啃 <strong>订单、财务</strong> 核心模块</li>
+            <li>标签含 SaaS / B 端 / AI / 玩具贸易</li>
+            <li>面向中小客户 → 功能要轻、实施要快</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">三地协同</div>
+          <h4>澄海 · 深圳 · 义乌</h4>
+          <p class="who">营销 / 技术 / 业务拓展</p>
+          <ul>
+            <li>澄海：营销中心（产业带客户）</li>
+            <li><strong>深圳坂田</strong>：技术中心（本岗办公）</li>
+            <li>义乌：业务中心（全国拓展）</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="tag">发展节奏</div>
+          <h4>从平台到 ERP</h4>
+          <ul>
+            <li>2020：推小竹熊选品平台</li>
+            <li>2020–2022：展厅合作，服务上万贸易公司</li>
+            <li>2023：三地协同成型</li>
+            <li>2026：推出双引鲸贸易管理系统</li>
+          </ul>
+        </article>
+      </div>
+
+      <h3>1.2 贸易 ERP 主路径（面试可画）</h3>
+      <div class="flow">
+        <span class="step">采购入库</span><span class="arrow">→</span>
+        <span class="step">库存可用</span><span class="arrow">→</span>
+        <span class="step">销售订单</span><span class="arrow">→</span>
+        <span class="step">出库履约</span><span class="arrow">→</span>
+        <span class="step">对账开票</span><span class="arrow">→</span>
+        <span class="step">财务入账</span>
+      </div>
+      <div class="term">
+        本岗重点在后半段与财务闭环：订单状态机、异常单、应收应付、开票对账。采购/库存要懂主流程，细节可用「跟通一家客户」补。
+      </div>
+      <p class="section-lead" style="margin-top:8px;">
+        产品经理价值：把贸易商口述痛点，拆成<strong>轻量化、可配置</strong>的功能，而不是一上来堆重审批、重定制。
+      </p>
+    </section>
+
+    <!-- 2. 商业模式 -->
+    <section id="biz">
+      <h2>二、商业模式（谁付钱、怎么赚钱）</h2>
+      <p class="section-lead">
+        公开信息偏「产业数字化赋能」叙事；收费细节未完全披露。面试用「合理假设 + 主动反问」即可，别编造 ARR。
+      </p>
+
+      <h3>2.1 两条价值线</h3>
+      <div class="grid">
+        <div class="card">
+          <h4>平台线 · 小竹熊</h4>
+          <ul>
+            <li>解决找货、曝光、询价对接</li>
+            <li>可能模式：会员 / 推广 / 交易相关服务（待当面核实）</li>
+            <li>价值：聚流量、建信任、懂客户作业</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>软件线 · 双引鲸 ERP</h4>
+          <ul>
+            <li>解决企业内部经营数字化</li>
+            <li>更可能是 SaaS 订阅 / 实施服务费（待核实）</li>
+            <li>本岗直接贡献：模块可用、中小客户能上线、续费意愿</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>2.2 交叉协同（产品怎么互相带）</h3>
+      <ul class="list-check">
+        <li><strong>小竹熊</strong>上的贸易商 / 展厅客户 → 转化用 <strong>双引鲸</strong> 管进销存与账务</li>
+        <li>双引鲸里做好的单据与商品数据 → 反哺选品/经营效率（是否已打通，面试要问）</li>
+        <li>协会身份与产业带口碑 → 降低获客成本</li>
+      </ul>
+
+      <h3>2.3 对「ERP 产品经理」意味着什么</h3>
+      <p>
+        你日常不是做 C 端商城详情页，而是：把采购/订单/库存/财务拆成模块、保证中小客户学得会、
+        跟销售/实施对齐「轻量方案」、用版本迭代把客诉和返工压下去。
+        这和你做过的 <strong>商贸后台、订单履约、结算中台、SaaS 封装</strong> 是同一类产品思维；差别是客户更小、功能要更克制。
+      </p>
+    </section>
+
+    <!-- 3. JD -->
+    <section id="jd">
+      <h2>三、岗位 JD 白话拆解</h2>
+      <p class="section-lead">岗位：erp软件产品经理 · 深圳 · <strong>10–15K</strong> · 3–5 年 · 大专 · SAAS / B 端 / ERP / AI / 玩具贸易</p>
+
+      <h3>3.1 工作职责（他们希望你每天干嘛）</h3>
+      <table>
+        <thead>
+          <tr><th>JD 原文要点</th><th>人话</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>负责 ERP 订单、财务核心模块规划迭代</td>
+            <td>你是这两个模块的 Owner：定优先级、写方案、盯版本</td>
+          </tr>
+          <tr>
+            <td>深挖客户痛点，输出落地需求方案</td>
+            <td>听销售/客户讲完，能变成研发做得动、验收得了的需求</td>
+          </tr>
+          <tr>
+            <td>协调研发落地，跟进上线反馈，优化适配与易用</td>
+            <td>上线不是结束；中小客户不会用、不好用，你要接着改</td>
+          </tr>
+          <tr>
+            <td>提供中小客户场景的产品方案支持</td>
+            <td>可能含售前方案、配置建议、轻量定制边界——面试要问清占比</td>
+          </tr>
+          <tr>
+            <td>完成领导交办的其他工作</td>
+            <td>小团队常态：可能兼一点别的模块或协作事务</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3.2 任职资格（他们怎么筛人）</h3>
+      <table>
+        <thead>
+          <tr><th>要求</th><th>人话</th><th>对你</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2 年+ ERP 或 SaaS 产品经理；商贸或玩具优先</td>
+            <td>做过企业软件最好；商贸经验也加分</td>
+            <td><span class="badge badge-ok">匹配</span> 6 年商贸电商 + SaaS；勿硬称传统 ERP 专家</td>
+          </tr>
+          <tr>
+            <td>熟悉玩具贸易：采购、订单、库存</td>
+            <td>懂进销存主路径即可</td>
+            <td><span class="badge badge-ok">强（商贸）</span> / <span class="badge badge-mid">玩具术语可补</span></td>
+          </tr>
+          <tr>
+            <td>熟练幕客、PS；独立 PRD 与原型</td>
+            <td>能独立出文档和原型</td>
+            <td><span class="badge badge-mid">可补</span> 如实说工具栈；强调交付物与可迁移</td>
+          </tr>
+          <tr>
+            <td>能把需求转成<strong>轻量化</strong>功能</td>
+            <td>别给中小客户堆重 ERP</td>
+            <td><span class="badge badge-ok">叙事关键</span> 用「标准化优先、配置化差异」讲</td>
+          </tr>
+          <tr>
+            <td>加分：互联网 / 计算机服务 / 软件</td>
+            <td>科班或互联网产品背景加分</td>
+            <td><span class="badge badge-ok">匹配</span> 计算机背景 + 互联网产品经历</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4. 匹配度 -->
+    <section id="match">
+      <h2>四、你的简历 vs 双引鲸岗位 · 匹配矩阵</h2>
+      <p class="section-lead">基于简历：侨城汇（福利商城 / 企业集采 / 统一结算中心）、云中鹤（选品比价 / 履约监控 / 重点客户集成）、大乐装（采购平台 / BBC 商城）；能力含业财融合与 AI 工作流。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>等级</th>
+            <th>证据（你已有）</th>
+            <th>面试怎么说</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>商贸 / SaaS / 多客户</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>企业商城 0→1 年收 3000 万+；SaaS 输出额外创收 1500 万+</td>
+            <td>强调可配置、多客户差异；对标中小贸易商轻量方案</td>
+          </tr>
+          <tr>
+            <td>订单 / 采购 / 库存</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>S2B2C/S2B2B 全链路：商品库存、订单履约、退换货、供应链对接</td>
+            <td>口述主路径：采购入库→库存→销售出库→售后对账</td>
+          </tr>
+          <tr>
+            <td>财务 / 账票款</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>统一结算中心：账单清洗入账、航信开票、业财一体</td>
+            <td>直接对标 JD「财务核心模块」；讲单据进、规则算、账票出</td>
+          </tr>
+          <tr>
+            <td>中小客户 + 轻量化</td>
+            <td><span class="badge badge-mid">中高</span></td>
+            <td>有过大客定制；需主动改口风到「砍需求、配参数」</td>
+            <td>准备一个「复杂需求拆成主路径/配置/二期」的轻量化案例</td>
+          </tr>
+          <tr>
+            <td>交付与对接</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>南网 30 天四链路；短周期联调陪跑</td>
+            <td>对标上线反馈、易用性迭代、异常兜底</td>
+          </tr>
+          <tr>
+            <td>玩具垂直</td>
+            <td><span class="badge badge-gap">低</span></td>
+            <td>无展厅/借样等一线产品经历</td>
+            <td>诚实缺口 + 商贸相邻 + 跟通客户主路径补课</td>
+          </tr>
+          <tr>
+            <td>幕客 / PS 原型</td>
+            <td><span class="badge badge-mid">中</span></td>
+            <td>能独立 PRD/原型；工具未必是幕客</td>
+            <td>如实工具栈；强调同属原型工具可迁移；可现场画主路径</td>
+          </tr>
+          <tr>
+            <td>AI（JD 标签）</td>
+            <td><span class="badge badge-mid">中</span></td>
+            <td>Agent + 系统现状知识库嵌进工作流</td>
+            <td>先问清对方 AI 定位；讲工作流提效，不编造产品功能</td>
+          </tr>
+          <tr>
+            <td>地点 / 年限</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>深圳经历、6 年产品、大专门槛满足</td>
+            <td>硬性门槛基本满足；薪资带宽 10-15K 需谈清结构</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>综合判断</h3>
+      <p>
+        <strong>值得面，叙事要对准。</strong>
+        你是「强商贸 SaaS / 订单财务产品经理 + 弱玩具垂直」；JD 写了商贸优先，玩具是加分不是唯一门槛。
+        面试胜负手：30 分钟内让对方相信，你能把订单财务做扎实，并且懂<strong>给中小客户做轻</strong>。
+      </p>
+    </section>
+
+    <!-- 5. 差距 -->
+    <section id="gap">
+      <h2>五、差距与速补路径</h2>
+
+      <h3>5.1 主要差距（白话）</h3>
+      <ul class="list-check">
+        <li>还不太熟：澄海展厅、借样/补样、玩具 SKU 碎、样品库存怎么管</li>
+        <li>还没摸过：双引鲸现有模块完成度、和财务软件（用友/金蝶等）是否已对接</li>
+        <li>工具名：幕客未必是日常主力，需准备「可迁移」说法</li>
+        <li>薪资：JD 10-15K，谈前先摸清是否兼实施/出差、底薪绩效结构</li>
+      </ul>
+
+      <h3>5.2 考前速补清单</h3>
+      <div class="day">
+        <div class="d">D1</div>
+        <div>
+          <strong>两条产品记牢</strong>：小竹熊=找货；双引鲸=管经营。各用 3 句话写「帮谁、解决啥、和本岗关系」。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D2</div>
+        <div>
+          <strong>主路径口述</strong>：采购→库存→订单→出库→对账开票，录音 2 分钟讲顺；加玩具扰动点（借样补样）。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D3</div>
+        <div>
+          <strong>轻量化案例</strong>：准备 1 个「客户要很重 → 你拆成默认简版 + 参数」的故事（可用 SaaS 标准化优先作素材）。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D4</div>
+        <div>
+          <strong>结算中心 STAR</strong>：对标财务模块；练到 90 秒内讲完 + 迁移句。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D5</div>
+        <div>
+          <strong>自我介绍专版</strong>：标准版 1.5–2 分钟；挂钩双引鲸订单财务 + 中小客户轻量化 + AI 工作流新表述。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D6</div>
+        <div>
+          <strong>工具与反问</strong>：定稿幕客/原型一句话；从本场反问清单勾 3～4 个。
+        </div>
+      </div>
+      <div class="day">
+        <div class="d">D7</div>
+        <div>
+          <strong>模拟面试</strong>：对着本文「面试话术」自问自答；想好 10-15K 谈法。
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 面试 -->
+    <section id="interview">
+      <h2>六、面试话术包</h2>
+
+      <h3>6.1 自我介绍（约 90～120 秒）</h3>
+      <div class="story">
+        <p>
+          面试官您好，我是廖送平，计算机专业背景，大学实习做过约半年开发，毕业后一直做产品经理，至今有 6 年电商相关产品经验。<br />
+          期间做过 S2B2C、S2B2B 模式电商平台，覆盖供应商端、商户端、平台端到 C 端，熟悉商品、价格库存、订单履约与退换货；也主导过第三方供应链对接。<br />
+          对内参与供应链系统整合重建、业务系统统一结算中心建设，并与财务系统集成实现业财一体化。<br />
+          对外负责过 SaaS 商城能力封装与客户定制，以及与客户、供应商系统的深度对接，具备短周期交付与业务陪跑经验。
+        </p>
+        <p>我的核心优势：</p>
+        <p>第一，过往项目主要也是 toB 电商相关，服务对象也都是 B 企业客户和供应商，做过 SaaS 产品和大客定制化，并具备丰富的跨系统对接集成经验；</p>
+        <p>第二，做过完整的订单履约与结算财务闭环，熟悉采购、库存、订单到账票款的单据流，和贵司 ERP 订单、财务模块接近；</p>
+        <p>第三，技术背景便于和研发同频；同时自己也在积极使用 AI，用 AI Agent 搭建系统现状知识库，把 AI 嵌进产品工作流提效，而不只是停留在网页中与大模型对话问答。</p>
+        <p>
+          了解到贵司从小竹熊选品平台延伸到双引鲸贸易管理系统，服务玩具贸易企业的经营数字化，我对参与订单与财务模块、服务好中小客户很感兴趣。谢谢。
+        </p>
+      </div>
+
+      <h3>6.2 自我介绍后可能追问（预判）</h3>
+      <p class="section-lead">介绍讲完，对方常沿你刚抛出的关键词追问。按出现概率准备。</p>
+
+      <h4>几乎必问</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>建议怎么答</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>统一结算中心 / 业财一体怎么做的？</td>
+            <td>
+              <strong>STAR：</strong>多业务线结算分散 → 建结算枢纽（归集订单、账单入账、对接开票，约 4 个月）→ 账票款统一。<br />
+              <strong>迁移：</strong>与 ERP 财务「单据进—规则算—账票出」同类。
+            </td>
+          </tr>
+          <tr>
+            <td>采购、订单、库存你怎么理解？</td>
+            <td>
+              贸易商主路径：采购入库 → 库存可用 → 销售订单占用/出库 → 售后与对账。<br />
+              强调状态机、异常单、多供应商；玩具侧可提款多 SKU 碎、借样补样扰动库存。
+            </td>
+          </tr>
+          <tr>
+            <td>没做过玩具 ERP，怎么补？</td>
+            <td>
+              承认玩具术语短板；商贸单据流 + 业财是相邻能力。<br />
+              补法：跟通 1 家中小客户主路径 + 跟销售听痛点；差异做配置，不堆定制。
+            </td>
+          </tr>
+          <tr>
+            <td>小竹熊和双引鲸什么关系？</td>
+            <td>
+              <strong>小竹熊：</strong>选品/供需（找货）。<strong>双引鲸：</strong>贸易管理 ERP（管经营）。本岗做后者；可问数据是否打通。
+            </td>
+          </tr>
+          <tr>
+            <td>什么叫轻量化？举例</td>
+            <td>
+              需求拆：主路径必做 / 配置项 / 二期。<br />
+              例：十种审批 → 中小客户默认简易审批 + 可开参数；反对一上来造重流程。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>高频追问</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>建议怎么答</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>中小客户方案支持具体做什么？</td>
+            <td>先对齐是售前、实施配置还是需求翻译。你侧：口述转轻量方案 + 验收标准；边界：不把临时承诺塞研发。</td>
+          </tr>
+          <tr>
+            <td>SaaS 和大客定制怎么平衡？</td>
+            <td>核心可配置；差异参数化；定制评估能否回馈产品。对齐 JD「轻量化」。</td>
+          </tr>
+          <tr>
+            <td>用过幕客 / PS 吗？</td>
+            <td>如实说工具栈；能独立 PRD+原型；幕客同类可迁移；可现场画订单主路径。</td>
+          </tr>
+          <tr>
+            <td>AI 标签怎么理解？</td>
+            <td>先问清对方定位。你侧：Agent 知识库嵌进工作流；系统侧可谈单据校验/异常提示，不编造。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>产品经理常规题</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>建议怎么答</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>前 90 天做什么？</td>
+            <td>
+              <strong>30 天：</strong>跟通采购→库存→订单→对账/开票。<br />
+              <strong>60 天：</strong>啃一类中小客户高频痛点（对账/异常单）。<br />
+              <strong>90 天：</strong>定可量化目标（人效、差错率、活跃客户数）。
+            </td>
+          </tr>
+          <tr>
+            <td>财务模块和用友/金蝶边界？</td>
+            <td>业务单据与经营过程在 ERP；总账报税在财务软件。先摸清客户现有工具，做集成不重复造轮子。</td>
+          </tr>
+          <tr>
+            <td>如何衡量成功？</td>
+            <td>单据处理时长、对账差错率、中小客户上线/活跃数、客诉返工率。</td>
+          </tr>
+          <tr>
+            <td>竞品怎么看？</td>
+            <td>澄海本地垂直 ERP 不少；差异化：与小竹熊客群协同、轻量易实施、订单财务体验。不说全国第几。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>压力 / 细节题</h4>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>回答方向</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>薪资预期？（JD 10-15K）</td>
+            <td>先确认是否兼实施/出差；区间可对齐 JD，重点谈匹配；期望更高用绩效/涨薪节奏谈，勿开场硬顶。</td>
+          </tr>
+          <tr>
+            <td>稳定性 / 为何看机会？</td>
+            <td>想做垂直产业 ToB SaaS，把订单财务做深；避免抱怨前司。</td>
+          </tr>
+          <tr>
+            <td>能出差澄海/义乌吗？</td>
+            <td>深圳技术中心岗，客户在产业带——给可接受频率。</td>
+          </tr>
+          <tr>
+            <td>公司主体很新怎么看？</td>
+            <td>认可 2020 起小竹熊积累；问清双引鲸编制与 roadmap。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="tip">
+        考前优先背熟：结算中心、采购订单库存口述、轻量化案例、小竹熊 vs 双引鲸、幕客工具一句、10-15K 谈法。不会玩具细节时：承认 + 说明跟客户主路径怎么补，比硬编强。
+      </div>
+
+      <h3>6.3 三个可讲项目（STAR 提纲）</h3>
+      <div class="story">
+        <h4>故事 A · 统一结算中心（对标：财务 / 账票款）</h4>
+        <p><strong>S</strong> 多业务线结算分散、财务入账慢。<br />
+           <strong>T</strong> 从 0 到 1 建统一结算枢纽。<br />
+           <strong>A</strong> 归集订单→账单清洗→推财务；对接开票；约 4 个月打通。<br />
+           <strong>R</strong> 账票款统一，减少重复建设。<br />
+           <strong>迁移句</strong>：与 ERP 财务模块结构同类。</p>
+      </div>
+      <div class="story">
+        <h4>故事 B · 企业商城 SaaS 化（对标：轻量化 / 可配置）</h4>
+        <p><strong>S</strong> 内部能力要对外输出。<br />
+           <strong>T</strong> 封装核心能力做可配置平台。<br />
+           <strong>A</strong> 标准化优先，差异参数化，战略客户才定制。<br />
+           <strong>R</strong> 外部客户额外创收 1500 万+。<br />
+           <strong>迁移句</strong>：对齐中小客户「少而精、好上手」。</p>
+      </div>
+      <div class="story">
+        <h4>故事 C · 南网 / 供应链对接（对标：痛点落地 / 短周期）</h4>
+        <p><strong>S</strong> 大客户短周期集成压力大。<br />
+           <strong>T</strong> 30 天打通商品/订单/物流/售后等链路。<br />
+           <strong>A</strong> 范围冻结、联调清单、异常兜底、业务陪跑。<br />
+           <strong>R</strong> 稳定上线，半年营收贡献显著。<br />
+           <strong>迁移句</strong>：对标上线反馈与易用性迭代。</p>
+      </div>
+
+      <h3>6.4 你可主动反问对方的问题</h3>
+      <p class="section-lead">直接采用通用反问清单；现场每组各选 1～2 个即可。本场可将「业务/领域专家」换成「实施」。</p>
+      <h4>公司客户和系统建设情况</h4>
+      <ul class="list-check">
+        <li>目前贵公司的核心客户画像是？业务体量在多少呢？</li>
+        <li>目前贵公司的产品建设到什么程度？</li>
+        <li>近半年或一年的建设方向和产品目标是？</li>
+        <li>一般一个月有几个版本，需求从提出到上线的周期大概多久呢？</li>
+      </ul>
+      <h4>部门情况</h4>
+      <ul class="list-check">
+        <li>研发和产品各多少人？</li>
+        <li>产品之间如何分工？</li>
+        <li>这个岗位是新增岗还是替补岗呢？负责的工作内容是？</li>
+        <li>产品经理、实施和销售目前是如何协同作业的呢？</li>
+      </ul>
+      <h4>收尾（可选）</h4>
+      <ul class="list-check">
+        <li>这个岗位最看重候选人哪一点呢？</li>
+        <li>如果今天聊下来感觉合适，后续大概还有几轮？大概多久能有反馈？</li>
+      </ul>
+    </section>
+
+    <!-- 7. 术语词典 -->
+    <section id="glossary">
+      <h2>七、术语小词典（考前速查）</h2>
+      <p class="section-lead">把本页出现过的词，再用一张表记牢。面试听不懂时，先用「人话」对齐，再记正式名称。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>术语</th>
+            <th>人话解释</th>
+            <th>和双引鲸的关系</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>澄海</td>
+            <td>汕头澄海区，中国玩具产业重镇</td>
+            <td>客户与营销中心所在</td>
+          </tr>
+          <tr>
+            <td>展厅</td>
+            <td>样品展示与撮合场所</td>
+            <td>小竹熊合作对象；产业作业节点</td>
+          </tr>
+          <tr>
+            <td>借样 / 补样</td>
+            <td>向厂商拿样、补样</td>
+            <td>扰动库存与样品管理</td>
+          </tr>
+          <tr>
+            <td>小竹熊</td>
+            <td>玩具选品 / 供需对接平台</td>
+            <td>找货；产业入口</td>
+          </tr>
+          <tr>
+            <td>双引鲸</td>
+            <td>贸易管理系统（ERP）</td>
+            <td>本岗产品；管经营</td>
+          </tr>
+          <tr>
+            <td>进销存</td>
+            <td>采购进货、销售出货、库存管理</td>
+            <td>贸易 ERP 基础能力</td>
+          </tr>
+          <tr>
+            <td>订单模块</td>
+            <td>销售/采购订单全生命周期</td>
+            <td>JD 核心职责之一</td>
+          </tr>
+          <tr>
+            <td>财务模块 / 账票款</td>
+            <td>对账、开票、应收应付、入账闭环</td>
+            <td>JD 核心职责之一</td>
+          </tr>
+          <tr>
+            <td>轻量化</td>
+            <td>功能少而精、好上手、少重流程</td>
+            <td>中小客户产品原则</td>
+          </tr>
+          <tr>
+            <td>SaaS</td>
+            <td>软件按服务订阅，云端使用</td>
+            <td>岗位标签与产品形态</td>
+          </tr>
+          <tr>
+            <td>幕客</td>
+            <td>一类原型设计工具（与 Axure/墨刀同类）</td>
+            <td>JD 要求；工具可迁移</td>
+          </tr>
+          <tr>
+            <td>用友 / 金蝶</td>
+            <td>常见财务/ERP 软件厂商</td>
+            <td>客户可能已有；边界是集成而非重复造轮子</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      本地面试准备页 · 仅供个人求职使用 · 内容依据 BOSS 公开信息、小竹熊展商简介与个人简历整理<br />
+      文件：双引鲸面试准备.html · 用浏览器打开即可离线阅读
+    </footer>
+  </div>
+  <script>
+    (function () {
+      function wrapHeading(heading, stopTag) {
+        var nodes = [];
+        var node = heading.nextSibling;
+        while (node) {
+          var next = node.nextSibling;
+          if (node.nodeType === 1) {
+            var tag = node.tagName;
+            if (tag === stopTag || tag === "H2") break;
+            if (stopTag === "H3" && tag === "H3") break;
+            nodes.push(node);
+          } else if (node.nodeType === 3 && node.textContent.trim()) {
+            nodes.push(node);
+          }
+          node = next;
+        }
+        if (!nodes.length) return;
+
+        var body = document.createElement("div");
+        body.className = "fold-body";
+        nodes.forEach(function (n) { body.appendChild(n); });
+        heading.parentNode.insertBefore(body, heading.nextSibling);
+
+        var title = document.createElement("span");
+        title.className = "fold-title";
+        while (heading.firstChild) title.appendChild(heading.firstChild);
+        heading.appendChild(title);
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "fold-btn";
+        btn.setAttribute("aria-expanded", "true");
+        btn.textContent = "收起";
+        heading.appendChild(btn);
+
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var collapsed = body.classList.toggle("is-collapsed");
+          heading.classList.toggle("is-collapsed", collapsed);
+          btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+          btn.textContent = collapsed ? "展开" : "收起";
+        });
+      }
+
+      document.querySelectorAll(".wrap > section").forEach(function (section) {
+        var h3s = Array.prototype.slice.call(section.querySelectorAll(":scope > h3")).reverse();
+        h3s.forEach(function (h3) { wrapHeading(h3, "H3"); });
+        var h2 = section.querySelector(":scope > h2");
+        if (h2) wrapHeading(h2, "H2");
+      });
+
+      function setFold(heading, collapsed) {
+        var body = heading.nextElementSibling;
+        if (!body || !body.classList.contains("fold-body")) return;
+        var btn = heading.querySelector(".fold-btn");
+        body.classList.toggle("is-collapsed", collapsed);
+        heading.classList.toggle("is-collapsed", collapsed);
+        if (btn) {
+          btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+          btn.textContent = collapsed ? "展开" : "收起";
+        }
+      }
+
+      document.querySelectorAll(".wrap > section > h2, .wrap > section > h3").forEach(function (el) {
+        setFold(el, true);
+      });
+
+      var interview = document.getElementById("interview");
+      if (interview) {
+        interview.querySelectorAll(":scope > h2, :scope > h3").forEach(function (el) {
+          setFold(el, false);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
