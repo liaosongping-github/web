@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>轻喜到家 · 智能业务产品经理面试准备</title>
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --paper: #fffcf7;
+      --ink: #1c2a32;
+      --muted: #5a6b75;
+      --line: #d9cfc2;
+      --accent: #0d6e6e;
+      --accent-soft: #e4f3f2;
+      --warm: #b45309;
+      --warm-soft: #fef3e6;
+      --ok: #166534;
+      --ok-soft: #e8f5ec;
+      --mid: #854d0e;
+      --mid-soft: #fef9c3;
+      --gap: #9f1239;
+      --gap-soft: #ffe4e6;
+      --shadow: 0 10px 30px rgba(28, 42, 50, 0.06);
+      --radius: 14px;
+      --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #e7f0ee 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #f8e9d8 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.7;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(246, 243, 238, 0.92);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      max-width: 1080px; margin: 0 auto; padding: 12px 20px;
+      display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+    }
+    .brand { font-weight: 700; color: var(--accent); margin-right: 8px; white-space: nowrap; }
+    .nav a {
+      font-size: 13px; color: var(--muted); padding: 4px 8px; border-radius: 999px;
+    }
+    .nav a:hover { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+    header.hero { padding: 48px 0 28px; }
+    .eyebrow {
+      display: inline-block; font-size: 12px; letter-spacing: 0.08em;
+      color: var(--accent); background: var(--accent-soft);
+      padding: 4px 10px; border-radius: 999px; margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(1.7rem, 3vw, 2.35rem);
+      line-height: 1.25; margin: 0 0 12px; font-weight: 800;
+    }
+    .lead { color: var(--muted); font-size: 1.05rem; max-width: 740px; margin: 0 0 22px; }
+    .verdict {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin-top: 18px;
+    }
+    .vcard {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow);
+    }
+    .vcard strong { display: block; font-size: 0.95rem; margin-bottom: 4px; }
+    .vcard span { font-size: 0.9rem; color: var(--muted); }
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 28px 24px;
+      margin: 22px 0;
+      box-shadow: var(--shadow);
+    }
+    section h2 {
+      margin: 0 0 8px; font-size: 1.35rem;
+      padding-bottom: 10px; border-bottom: 2px solid var(--accent-soft);
+    }
+    section h3 { margin: 22px 0 8px; font-size: 1.08rem; }
+    section h4 { margin: 16px 0 8px; font-size: 1rem; }
+    .section-lead { color: var(--muted); margin: 0 0 18px; }
+    .tip, .term {
+      background: var(--warm-soft);
+      border-left: 3px solid var(--warm);
+      padding: 10px 12px;
+      margin: 10px 0 14px;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.92rem;
+      color: #7c2d12;
+    }
+    .tip::before, .term::before {
+      content: "人话解释 · ";
+      font-weight: 700;
+      color: var(--warm);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fff;
+    }
+    .card .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.04em; color: var(--accent);
+      background: var(--accent-soft); padding: 2px 8px; border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .card h4 { margin: 0 0 6px; font-size: 1.02rem; }
+    .card .who { font-size: 0.88rem; color: var(--muted); margin-bottom: 8px; }
+    .card ul { margin: 8px 0 0; padding-left: 1.1em; }
+    .card li { margin: 4px 0; font-size: 0.92rem; }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 0.92rem;
+      overflow: hidden; border-radius: 12px;
+    }
+    th, td {
+      border: 1px solid var(--line); padding: 10px 12px; vertical-align: top; text-align: left;
+    }
+    th { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+    tr:nth-child(even) td { background: #faf8f4; }
+    .badge {
+      display: inline-block; font-size: 12px; font-weight: 700;
+      padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+    }
+    .badge-ok { background: var(--ok-soft); color: var(--ok); }
+    .badge-mid { background: var(--mid-soft); color: var(--mid); }
+    .badge-gap { background: var(--gap-soft); color: var(--gap); }
+    .flow {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin: 12px 0 18px;
+    }
+    .flow .step {
+      background: var(--accent-soft); color: var(--accent);
+      padding: 8px 12px; border-radius: 10px; font-size: 0.88rem; font-weight: 600;
+    }
+    .flow .arrow { color: var(--muted); }
+    .list-check { padding-left: 1.1em; }
+    .list-check li { margin: 8px 0; }
+    .story {
+      border: 1px dashed var(--line); border-radius: 12px;
+      padding: 14px 16px; margin: 12px 0; background: #fff;
+    }
+    .day {
+      display: grid; grid-template-columns: 72px 1fr; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--line);
+    }
+    .day:last-child { border-bottom: none; }
+    .day .d {
+      font-weight: 800; color: var(--accent); background: var(--accent-soft);
+      border-radius: 10px; text-align: center; padding: 8px 0; height: fit-content;
+    }
+    footer {
+      text-align: center; color: var(--muted); font-size: 0.85rem; padding: 24px 0 8px;
+    }
+    .note {
+      font-size: 0.88rem; color: var(--muted);
+      background: #f3f0ea; padding: 10px 12px; border-radius: 10px; margin-top: 14px;
+    }
+    @media (max-width: 640px) {
+      section { padding: 20px 16px; }
+      .day { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">轻喜到家 · 面试准备</div>
+      <nav class="nav">
+        <a href="#company">公司业务</a>
+        <a href="#jd">岗位拆解</a>
+        <a href="#match">匹配度</a>
+        <a href="#gap">差距补齐</a>
+        <a href="#interview">面试话术</a>
+        <a href="#ask">反问</a>
+        <a href="#glossary">术语词典</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="eyebrow">轻喜到家 · 深圳 · 15-30K · 研发架构师约面</div>
+      <h1>智能业务产品经理（有开发经验）：业务、AI 与你的匹配度</h1>
+      <p class="lead">
+        帮你用「人话」搞清轻喜到家在卖什么、本岗大概在啃哪块智能业务，
+        以及怎么把你的电商中后台 + 技术背景 + AI 工作流，讲成对方架构师听得懂的匹配故事。
+      </p>
+      <div class="verdict">
+        <div class="vcard">
+          <strong>公司是谁</strong>
+          <span>C 轮、万人级家庭到家服务 O2O：保洁/保姆/母婴等自营服务 + 职培 + 数字化调度。</span>
+        </div>
+        <div class="vcard">
+          <strong>岗位在干什么</strong>
+          <span>标签落在 C/B + <strong>语音 AI</strong> + 增长/营销；要能把复杂业务抽象成系统，并懂一点开发与 AI 落地。</span>
+        </div>
+        <div class="vcard">
+          <strong>你的匹配结论</strong>
+          <span><strong>强：</strong>技术同频、业务系统/履约结算、跨系统交付、AI Agent 知识库。<strong>弱：</strong>家政垂直与语音客服产品主责经历。</span>
+        </div>
+        <div class="vcard">
+          <strong>面试主策略</strong>
+          <span>对架构师讲「抽象能力 + 接口/字段同频 + AI 嵌进流程」；用履约监控/结算中台迁移到到家「派单—履约—质检—客服」。</span>
+        </div>
+      </div>
+      <p class="note">
+        信息来源：你提供的 BOSS 岗位/公司截图 · 公开报道与同公司智联岗位交叉参考 · 个人简历（2026-06）。
+        JD 正文以截图为准；若现场职责表述有出入，以面试官口径为准并当场对齐。
+      </p>
+    </header>
+
+    <!-- 1. 公司 -->
+    <section id="company">
+      <h2>一、公司与业务全景</h2>
+      <p class="section-lead">
+        一句话：用互联网 + 自营服务者体系，给家庭提供可控、可标准化的到家服务，并用数字化/AI 提升调度与人效。
+      </p>
+
+      <div class="tip">
+        到家 O2O ≈「用户下单 → 派服务者上门 → 过程质检 → 售后与复购」。比电商多了「人上门服务」这一层不确定性，所以调度、履约监控、客服与质检特别重要。
+      </div>
+
+      <h3>1.1 三块业务（先记故事）</h3>
+      <div class="grid">
+        <article class="card">
+          <div class="tag">轻喜到家平台</div>
+          <h4>家庭数字化生活服务</h4>
+          <p class="who">C 端家庭用户 · B 端服务运营</p>
+          <ul>
+            <li>保洁、保姆、母婴护理、家电清洗、开荒等</li>
+            <li>公开叙事：B2C 自营、自培员工制，强调服务可控</li>
+            <li>技术侧常提：AI 智能调度、过程透明、会员复购</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="tag">轻喜职业教育</div>
+          <h4>产教研融合的职培</h4>
+          <p class="who">服务者供给端</p>
+          <ul>
+            <li>培训保洁师、母婴护理师等职业化人才</li>
+            <li>为自营与行业输送持证服务者</li>
+            <li>面试可理解为「供给质量」的护城河</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="tag">单多多等</div>
+          <h4>劳动者职业发展 / 供需匹配</h4>
+          <p class="who">服务者与中小 B 端服务商</p>
+          <ul>
+            <li>就业上单 + 职业教育叙事</li>
+            <li>偏供给侧与中小 B 赋能（公开信息）</li>
+            <li>本岗是否直接做这块，当面问清</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="tag">公司画像（BOSS）</div>
+          <h4>C 轮 · 10000 人以上 · O2O</h4>
+          <ul>
+            <li>行业：生活服务（O2O）</li>
+            <li>总部深圳；多城布局</li>
+            <li>福利标签：节日福利、通讯补贴、团建、下午茶等</li>
+          </ul>
+        </article>
+      </div>
+
+      <h3>1.2 到家主路径（面试可画）</h3>
+      <div class="flow">
+        <span class="step">获客/下单</span><span class="arrow">→</span>
+        <span class="step">智能派单</span><span class="arrow">→</span>
+        <span class="step">上门履约</span><span class="arrow">→</span>
+        <span class="step">质检/客服</span><span class="arrow">→</span>
+        <span class="step">结算对账</span><span class="arrow">→</span>
+        <span class="step">复购/增长</span>
+      </div>
+      <div class="term">
+        你简历里的「订单履约监控、异常闭环、统一结算」可以迁移讲：电商 SKU 履约 ↔ 到家「人+时段+技能」履约；结算中心 ↔ 服务完成后的账票款与对账。
+      </div>
+    </section>
+
+    <!-- 2. JD -->
+    <section id="jd">
+      <h2>二、岗位 JD 白话拆解</h2>
+      <p class="section-lead">
+        岗位：智能业务产品经理（有开发经验）· 深圳 · <strong>15–30K</strong> · 3–5 年 · 本科<br />
+        标签：C 端产品 · B 端产品 · 语音类 AI · 增长 · 营销<br />
+        沟通人：晏奕 · 轻喜到家 · <strong>研发部架构师</strong>
+      </p>
+
+      <h3>2.1 从标签反推「他们要你每天干什么」</h3>
+      <table>
+        <thead>
+          <tr><th>JD / 标签要点</th><th>人话</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>业务系统经验（CRM / OA / ERP 等）</td>
+            <td>不是只做活动页的运营型 PM；要能啃中后台规则、状态机、角色权限与流程引擎</td>
+          </tr>
+          <tr>
+            <td>强逻辑 · PRD / 流程图 / SOP</td>
+            <td>能把「业务口述」变成研发可实现、业务可验收的文档与流程</td>
+          </tr>
+          <tr>
+            <td>有开发经验优先 · 懂前后端与字段</td>
+            <td>能和架构师/研发同频：接口边界、表字段、性能与异常，不说外行话</td>
+          </tr>
+          <tr>
+            <td>大模型 / Agent / 知识库 / 智能客服</td>
+            <td>知道 AI 怎么嵌进业务流程（客服、质检、助手），不是只会 ChatGPT 聊天</td>
+          </tr>
+          <tr>
+            <td>语音类 AI + 增长 / 营销标签</td>
+            <td>可能涉及智能外呼/语音触达、转化与复购相关能力；具体模块范围面试要问清</td>
+          </tr>
+          <tr>
+            <td>跨部门沟通与推动</td>
+            <td>业务、运营、客服、数据、研发多方拉齐，把版本推上线</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.2 任职要求对照（截图摘要）</h3>
+      <ul class="list-check">
+        <li>本科及以上，计算机 / 软工 / 信管等相关专业优先</li>
+        <li>3 年以上产品经验，做过业务系统、企业应用、CRM、OA、或零售电商等</li>
+        <li>业务抽象能力强；熟练 PRD、流程图、SOP</li>
+        <li>技术背景或开发经验优先；理解前后端交互与数据库字段</li>
+        <li>具备 AI 产品意识：大模型、Agent、知识库、智能客服等</li>
+        <li>优秀跨部门沟通与项目推动能力</li>
+      </ul>
+
+      <div class="note">
+        同公司智联上还有「CRM 产品经理（智能化与效能引擎）」等相近岗，强调规则引擎、工单、智能外呼、画像标签。
+        本场以 BOSS 本岗截图为准；若架构师把范围说成 CRM/调度/客服中的一块，当场记下来对齐自我介绍挂钩句。
+      </div>
+    </section>
+
+    <!-- 3. Match -->
+    <section id="match">
+      <h2>三、简历 × 岗位匹配矩阵</h2>
+      <p class="section-lead">候选人：廖送平 · 6 年电商产品 · 计算机背景 · 有开发实习 · AI Agent 工作流实践者</p>
+
+      <table>
+        <thead>
+          <tr><th>对方要什么</th><th>匹配</th><th>你的证据</th><th>怎么讲</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>有开发经验 / 懂字段与前后端</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>计算机本科路径 + 大学约半年开发；日常能与研发同频</td>
+            <td>强调「能读接口文档、能对齐字段与异常码」，不吹自己是工程师</td>
+          </tr>
+          <tr>
+            <td>业务系统 / CRM·OA·ERP 类</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>统一结算中心、业财一体、商城中后台、采购/合同结算（保利）、履约监控</td>
+            <td>诚实：未挂名 CRM Owner；用「客户—订单—履约—账票」中台能力迁移</td>
+          </tr>
+          <tr>
+            <td>PRD / 流程 / SOP / 抽象能力</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>多条 0→1 与重构；短周期南方电网四链路对接</td>
+            <td>准备 1 个「复杂流程 → 状态机/规则」案例（履约预警规则引擎）</td>
+          </tr>
+          <tr>
+            <td>AI：大模型 / Agent / 知识库 / 智能客服</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>Cursor Agent 建系统现状「产品真相库」；嵌入需求评估→PRD→上线更新闭环</td>
+            <td>讲方法与边界；智能客服/语音产品<strong>未主责</strong>，谈「如何协作落地」</td>
+          </tr>
+          <tr>
+            <td>C 端 + B 端</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>S2B2C/S2B2B 四端；BBC 家装；企业集采与员工福利</td>
+            <td>强调多端角色与权限差异，不是只会一端</td>
+          </tr>
+          <tr>
+            <td>增长 / 营销</td>
+            <td><span class="badge badge-mid">中</span></td>
+            <td>企业商城收入 0→3000 万+；福利商城增长；集单分单提毛利</td>
+            <td>用「业务增长结果」迁移，不把自己包装成纯增长 PM</td>
+          </tr>
+          <tr>
+            <td>语音类 AI</td>
+            <td><span class="badge badge-gap">低</span></td>
+            <td>无语音外呼/ASR 产品主责经历</td>
+            <td>如实缺口 + 补：业务闭环理解 + AI 接入点设计能力；愿快速跟业务听通话场景</td>
+          </tr>
+          <tr>
+            <td>生活服务 O2O 垂直</td>
+            <td><span class="badge badge-mid">中</span></td>
+            <td>电商履约/供应链 O2O 相邻；无家政上门服务垂直</td>
+            <td>迁移「履约不确定性、异常闭环、人效」；垂直术语考前速补</td>
+          </tr>
+          <tr>
+            <td>年限 / 学历 / 城市</td>
+            <td><span class="badge badge-ok">高</span></td>
+            <td>6 年产品 · 本科 · 深圳经历</td>
+            <td>硬性门槛满足；薪资 15-30K 带宽需谈清结构与职级</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>综合判断</h3>
+      <p>
+        <strong>值得认真面。</strong>
+        对方写「有开发经验」且约面人是架构师，这正好打在你技术背景与中后台交付上。
+        胜负手：30 分钟内让对方相信——你能把复杂业务抽象成可落地系统，能和研发同频，并且 AI 不是口号而是已嵌进工作流；
+        同时诚实承认语音客服垂直短板，给出一周可补的学习路径。
+      </p>
+    </section>
+
+    <!-- 4. Gap -->
+    <section id="gap">
+      <h2>四、差距与速补路径</h2>
+
+      <h3>4.1 主要差距</h3>
+      <ul class="list-check">
+        <li>语音智能客服 / 外呼产品未做过 Owner</li>
+        <li>家政到家术语：技能标签、服务半径、改约改派、服务质检、不满意重做等</li>
+        <li>本岗具体模块边界未在截图完全展开（调度？CRM？营销触达？）→ 必须反问对齐</li>
+      </ul>
+
+      <h3>4.2 考前速补</h3>
+      <div class="day">
+        <div class="d">D1</div>
+        <div><strong>公司三句话</strong>：自营到家服务 + 职培供给 + 数字化/AI 调度；本岗可能服务「智能业务」提效。</div>
+      </div>
+      <div class="day">
+        <div class="d">D2</div>
+        <div><strong>主路径口述</strong>：下单→派单→上门→质检/客服→结算→复购；对照你的履约监控讲一遍。</div>
+      </div>
+      <div class="day">
+        <div class="d">D3</div>
+        <div><strong>结算中心 STAR</strong> 90 秒；挂钩「服务完成后的账票款 / 对账」。</div>
+      </div>
+      <div class="day">
+        <div class="d">D4</div>
+        <div><strong>AI 工作流 demo 口述</strong>：真相库双源（PRD+代码）→ 影响分析 → PRD → 上线回写；边界：幻觉、权限、验收。</div>
+      </div>
+      <div class="day">
+        <div class="d">D5</div>
+        <div><strong>语音 AI 补课</strong>：搞清 ASR/TTS、外呼任务、质检抽检、人机切换；准备「我不懂装懂」的拒绝话术。</div>
+      </div>
+      <div class="day">
+        <div class="d">D6</div>
+        <div><strong>专版自我介绍</strong> + 勾选 3～4 个反问；想好 15-30K 谈法与到岗时间（简历写 1 周内）。</div>
+      </div>
+    </section>
+
+    <!-- 5. Interview -->
+    <section id="interview">
+      <h2>五、面试话术包</h2>
+
+      <h3>5.1 自我介绍（约 90～120 秒 · 对架构师版）</h3>
+      <div class="story">
+        <p>
+          面试官您好，我是廖送平，计算机专业背景，大学实习做过约半年开发，毕业后一直做产品经理，至今有 6 年电商相关产品经验。<br />
+          期间做过 S2B2C、S2B2B 平台，覆盖供应商、商户、平台到 C 端，熟悉商品、价格库存、订单履约与售后；也主导过第三方供应链与大客户系统对接。<br />
+          对内参与过供应链整合、统一结算中心与业财一体化，以及选品比价、履约监控等工具类产品。<br />
+          对外做过 SaaS 封装与大客户定制，短周期内推动商品/订单/物流/售后四链路集成并稳定运营。
+        </p>
+        <p>和本岗相关的三点优势：</p>
+        <p>第一，<strong>技术背景</strong>让我能和研发、架构高效同频，理解接口、字段与异常处理，方案可落地性更强；</p>
+        <p>第二，长期做<strong>业务中后台与履约闭环</strong>，习惯把复杂业务抽象成规则、状态机和可配置流程，这和 CRM/业务系统类产品的方法论接近；</p>
+        <p>第三，我在用 <strong>AI Agent + 知识库</strong>搭建系统现状「产品真相库」，把 AI 嵌进需求评估到上线回写的工作流，而不只是网页里和大模型聊天。</p>
+        <p>
+          了解到轻喜到家在做家庭到家服务的数字化与智能化，岗位又明确希望有开发经验、关注语音 AI 与智能业务，我很希望把中后台与 AI 落地经验用到贵司场景里。谢谢。
+        </p>
+      </div>
+
+      <h3>5.2 高频追问（预判）</h3>
+      <table>
+        <thead>
+          <tr><th>可能问什么</th><th>建议怎么答</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>你的开发经验具体到什么程度？</td>
+            <td>实习做过约半年开发；之后以产品为主，但能读代码/接口文档、对齐数据模型。边界：不替代研发写核心代码。</td>
+          </tr>
+          <tr>
+            <td>统一结算 / 业财怎么做的？</td>
+            <td>STAR：多业务线结算散 → 建结算中心归集账单并对接财务/航信开票（约 4 个月）→ 账票款统一。迁移：服务完成后的对账结算同类。</td>
+          </tr>
+          <tr>
+            <td>履约监控怎么设计的？</td>
+            <td>多维预警规则 + 客户项目个性化时效；异常标记与待办闭环；超时发货降 70%、物流客诉降 80%。迁移：到家改约/迟到/未完成服务的异常闭环。</td>
+          </tr>
+          <tr>
+            <td>没做过家政 / 语音 AI 怎么办？</td>
+            <td>承认垂直与语音产品短板；相邻能力是履约不确定性治理 + 业务抽象 + AI 接入方法。补法：跟听一线派单/客服 1～2 天，画清主路径再开需求。</td>
+          </tr>
+          <tr>
+            <td>你说的 AI 知识库怎么落地的？</td>
+            <td>双源：历史 PRD + 研发侧最新代码 → 系统现状真相库；用于影响分析与方案起草；上线后回写。强调权限、评审、幻觉校验，避免「AI 直接上生产」。</td>
+          </tr>
+          <tr>
+            <td>如何和架构师/研发协作？</td>
+            <td>先对齐目标与约束（性能、复用、排期）；方案给备选与取舍；接口与字段表先行；联调清单与验收标准一起定。</td>
+          </tr>
+          <tr>
+            <td>南方电网 30 天怎么扛下来的？</td>
+            <td>范围锁四链路；日清阻塞；业务策略与风控规则同步设计；上线后陪跑。结果：6 个月营收 1000 万+。</td>
+          </tr>
+          <tr>
+            <td>期望薪资？多久到岗？</td>
+            <td>简历面议 / 1 周内到岗。薪资：先问结构（底薪/绩效/职级），再给区间；可对标 JD 15-30K 中段并留弹性。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>5.3 项目弹药（被问再展开）</h3>
+      <div class="grid">
+        <div class="card">
+          <div class="tag">云中鹤</div>
+          <h4>履约监控 · 选品比价 · 南网对接</h4>
+          <ul>
+            <li>规则引擎与异常闭环</li>
+            <li>30 天四链路 API</li>
+            <li>对标：调度/履约/客服工单</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">侨城汇</div>
+          <h4>结算中心 · 企业商城 SaaS</h4>
+          <ul>
+            <li>业财一体与开票</li>
+            <li>0→3000 万+ / SaaS 外溢 1500 万+</li>
+            <li>对标：中后台与增长结果</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">大乐装</div>
+          <h4>保利采购平台 · BBC</h4>
+          <ul>
+            <li>供应商/合同/结算定制</li>
+            <li>驻场陪跑与推广</li>
+            <li>对标：复杂 B 端流程抽象</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="tag">AI 实践</div>
+          <h4>产品真相库工作流</h4>
+          <ul>
+            <li>Agent + 知识库</li>
+            <li>需求影响分析提效</li>
+            <li>对标：JD 的 AI 意识条款</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Ask -->
+    <section id="ask">
+      <h2>六、本场反问（建议选 3～4 个）</h2>
+      <p class="section-lead">约面人是研发架构师：少问福利官网信息，多问模块边界、技术约束与协作方式。</p>
+      <ul class="list-check">
+        <li>这个「智能业务」岗位当前最核心的模块是哪一块？更偏调度、CRM/客服，还是增长触达/语音？</li>
+        <li>语音类 AI 现在建设到哪一步了？ASR/外呼/质检是自研、采购还是混合？产品与算法/架构怎么分工？</li>
+        <li>近半年产品目标是什么？成功怎么量化（人效、转化、客诉、复购）？</li>
+        <li>产品和研发的编制与节奏？需求从提出到上线一般多久？</li>
+        <li>这个岗位是新增还是替补？您作为架构师，最希望这个 PM 补上哪块短板？</li>
+        <li>如果今天聊下来合适，后续还有几轮？大概多久有反馈？</li>
+      </ul>
+    </section>
+
+    <!-- 7. Glossary -->
+    <section id="glossary">
+      <h2>七、术语词典（速记）</h2>
+      <table>
+        <thead>
+          <tr><th>词</th><th>人话</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>到家 O2O</td><td>线上下单、线下上门服务的本地生活形态</td></tr>
+          <tr><td>自营员工制</td><td>服务者更多是平台自招自培，强调标准与可控（对比纯撮合）</td></tr>
+          <tr><td>智能调度 / 派单</td><td>按地点、时段、技能、等级等自动匹配服务者</td></tr>
+          <tr><td>服务履约</td><td>从接单到上门完成的全过程；含改约、改派、异常</td></tr>
+          <tr><td>质检</td><td>对服务质量抽检/评分/返工（如不满意重做）</td></tr>
+          <tr><td>语音 AI</td><td>外呼、语音导航、通话质检等；常含 ASR/TTS</td></tr>
+          <tr><td>智能客服</td><td>用知识库/大模型辅助或自动应答，并支持转人工</td></tr>
+          <tr><td>Agent</td><td>能调用工具、多步完成任务的 AI 代理（不止聊天）</td></tr>
+          <tr><td>知识库 / RAG</td><td>把业务文档/系统说明检索给模型，降低胡编</td></tr>
+          <tr><td>CRM / SCRM</td><td>客户关系与触达；企微等社交化运营常称 SCRM</td></tr>
+          <tr><td>规则引擎</td><td>把「如果…则…」配置化，少改代码就能调策略</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      轻喜到家 · 智能业务产品经理面试准备 · 生成自简历与 BOSS 截图 · 仅供个人面试使用
+    </footer>
+  </div>
+</body>
+</html>
